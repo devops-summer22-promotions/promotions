@@ -1,9 +1,7 @@
-# NYU DevOps Project Template
+# Seller's Promotion Microservice
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/Language-Python-blue.svg)](https://python.org/)
-
-This is a skeleton you can use to start your projects
 
 ## Overview
 
@@ -57,7 +55,7 @@ tests/              - test cases package
 
 ## License
 
-Copyright (c) John Rofrano. All rights reserved.
+Copyright (c) Alex, Ankita, Daming Zeyu, Zihao and Prof. John Rofrano. All rights reserved.
 
 Licensed under the Apache License. See [LICENSE](LICENSE)
 
