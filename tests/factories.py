@@ -34,5 +34,5 @@ class PromoFactory(factory.Factory):
     type = FuzzyChoice(choices=[PromoType.BUY_ONE_GET_ONE, PromoType.PERCENT_DISCOUNT, PromoType.FREE_SHIPPING, PromoType.VIP])
     discount = None # placeholder; override during testing
     customer = None # placeholder; override during testing
-    start_date = FuzzyDate(date(2022, 7, 1))
-    end_date = FuzzyDate(date(2022, 10, 31))
+    start_date = FuzzyDate(date(2022, 7, 1), date(2022, 7, 31))
+    end_date = FuzzyDate(date(2022, 10, 1), date(2022, 10, 31))
