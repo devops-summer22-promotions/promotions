@@ -48,12 +48,12 @@ class TestPromotionModel(unittest.TestCase):
 
     def test_create_promotion(self):
         """ It should create a new promotion of various types and assert that it exists """
-        promo_1 = Promotion(name="Flash BOGO sale!", type=PromoType.BUY_ONE_GET_ONE, start_date=date.fromisoformat("01-01-2022"), end_date=date.fromisoformat("01-02-2022"))
-        self.assertEqual(promo_1, "<Promotion Flash BOGO sale! id=[None]>")
+        promo_1 = Promotion(name="Flash BOGO sale!", type=PromoType.BUY_ONE_GET_ONE, start_date=date.fromisoformat("2022-07-01"), end_date=date.fromisoformat("2022-07-02"))
+        self.assertEqual(str(promo_1), "<Promotion 'Flash BOGO sale!' id=[None]>")
         self.assertTrue(promo_1 is not None)
         self.assertEqual(promo_1.id, None)
         self.assertEqual(promo_1.name, "Flash BOGO sale!")
         self.assertEqual(promo_1.type, PromoType.BUY_ONE_GET_ONE)
-        self.assertEqual(promo_1.start_date, date.fromisoformat("01-01-2022"))
-        self.assertEqual(promo_1.end_date, date.fromisoformat("01-02-2022"))
-        # etc.
+        self.assertEqual(promo_1.start_date, date.fromisoformat("2022-07-01"))
+        self.assertEqual(promo_1.end_date, date.fromisoformat("2022-07-02"))
+        # etc. -- create other promo types; add further tests for sad path, and so forth
