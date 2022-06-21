@@ -38,7 +38,7 @@ class Promotion(db.Model):
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(63))
-    type = db.Column(db.Integer, nullable=False)
+    type = db.Column(db.Enum(PromoType), nullable=False)
     discount = db.Column(db.Integer, nullable=True, default=None) # could be a float, or just assume "whole point" percentage discounts as here (and convert later when necessary); null for non-PERCENT_DISCOUNT promos
     customer = db.Column(db.Integer, nullable=True, default=None) # e.g. for a VIP promotion / promos only applicable to a specific customer -- null by default
     start_date = db.Column(db.Date(), nullable=False) # date that promotion becomes effective
