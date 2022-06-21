@@ -17,6 +17,15 @@ class DataValidationError(Exception):
 
     pass
 
+class PromoType(Enum):
+    """Enumeration of valid Promotion types"""
+
+    BUY_ONE_GET_ONE = 0
+    PERCENT_DISCOUNT = 1
+    FREE_SHIPPING = 2
+    VIP = 3 # can potentially interact w/ customer ID from customers team
+    # etc., as desired
+
 
 class Promotion(db.Model):
     """
