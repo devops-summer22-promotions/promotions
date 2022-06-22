@@ -44,8 +44,8 @@ class TestPromotionServer(TestCase):
     def setUp(self):
         """ This runs before each test """
         self.app = app.test_client()
-        db.session.query(Promotion).delete()  # clean up the last tests
-        db.session.commit()
+        # db.session.query(Promotion).delete()  # clean up the last tests
+        # db.session.commit()
 
     def tearDown(self):
         """ This runs after each test """
@@ -74,7 +74,7 @@ class TestPromotionServer(TestCase):
             test_promo.customer = 123
         logging.debug("Test Promotion: %s", test_promo.serialize())
         response = self.app.post(
-            BASE_URL + '/foo',
+            BASE_URL,
             json=test_promo.serialize(),
             content_type=CONTENT_TYPE_JSON
         )
