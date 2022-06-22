@@ -71,7 +71,21 @@ class Promotion(db.Model):
 
     def serialize(self):
         """ Serializes a Promotion into a dictionary """
-        return {"id": self.id, "name": self.name}
+        serialized = {"id": self.id,
+                      "name": self.name,
+                      "discount": self.discount,
+                      "customer": self.customer,
+                      "start_date": self.start_date,
+                      "end_date": self.end_date}
+        if self.type == PromoType.BUY_ONE_GET_ONE:
+            serialized["type"] = 0
+        if self.type == PromoType.PERCENT_DISCOUNT:
+            serialized["type"] = 1
+        if self.type == PromoType.FREE_SHIPPING:
+            serialized["type"] = 2
+        if self.type == PromoType.VIP:
+            serialized["type"] = 3
+        return serialized
 
     def deserialize(self, data):
         """
@@ -82,6 +96,18 @@ class Promotion(db.Model):
         """
         try:
             self.name = data["name"]
+            self.discount = data["discount"]
+            self.customer = data["customer"]
+            self.start_date = data["start_date"]
+            self.end_date = data["end_date"]
+            if data["type"] == 0:
+                self.type = PromoType.BUY_ONE_GET_ONE
+            if data["type"] == 1:
+                self.type = PromoType.PERCENT_DISCOUNT
+            if data["type"] == 2:
+                self.type = PromoType.FREE_SHIPPING
+            if data["type"] == 3:
+                self.type = PromoType.VIP
         except KeyError as error:
             raise DataValidationError(
                 "Invalid Promotion: missing " + error.args[0]
