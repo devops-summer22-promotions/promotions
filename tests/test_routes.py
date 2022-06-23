@@ -12,7 +12,9 @@ from unittest.mock import MagicMock, patch
 from service import app
 from service.models import PromoType, db, Promotion
 from service.utils import status  # HTTP Status Codes
+from service.utils.time_management import str_to_dt # helper functions for dealing with datetimes as created by Postgres
 from tests.factories import PromoFactory
+
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
@@ -44,6 +46,7 @@ class TestPromotionServer(TestCase):
     def setUp(self):
         """ This runs before each test """
         self.app = app.test_client()
+        # TODO: figure out why enabling these two lines causes an error:
         # db.session.query(Promotion).delete()  # clean up the last tests
         # db.session.commit()
 
@@ -87,20 +90,20 @@ class TestPromotionServer(TestCase):
         # Check the data is correct
         new_promo = response.get_json()
         self.assertEqual(new_promo["name"], test_promo.name)
-        self.assertEqual(new_promo["type"], test_promo.type)
-        if new_promo.type in [PromoType.PERCENT_DISCOUNT, PromoType.VIP]:
+        self.assertEqual(new_promo["type"], test_promo.type.name)
+        if new_promo["type"] in [PromoType.PERCENT_DISCOUNT.name, PromoType.VIP.name]:
             self.assertEqual(new_promo["discount"], test_promo.discount)
-        if new_promo.type == PromoType.VIP:
+        if new_promo["type"] == PromoType.VIP.name:
             self.assertEqual(new_promo["customer"], test_promo.customer)
-        self.assertEqual(new_promo["start_date"], test_promo.start_date)
-        self.assertEqual(new_promo["end_date"], test_promo.end_date)
+        self.assertEqual(str_to_dt(new_promo["start_date"]), test_promo.start_date)
+        self.assertEqual(str_to_dt(new_promo["end_date"]), test_promo.end_date)
 
         # Check that the location header was correct
         response = self.client.get(location, content_type=CONTENT_TYPE_JSON)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         new_promo = response.get_json()
         self.assertEqual(new_promo["name"], test_promo.name)
-        self.assertEqual(new_promo["type"], test_promo.type)
+        self.assertEqual(new_promo["type"], test_promo.type.name)
         if new_promo.type in [PromoType.PERCENT_DISCOUNT, PromoType.VIP]:
             self.assertEqual(new_promo["discount"], test_promo.discount)
         if new_promo.type == PromoType.VIP:
