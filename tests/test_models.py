@@ -56,8 +56,9 @@ class TestPromotionModel(unittest.TestCase):
         self.assertEqual(promo_1.type, PromoType.BUY_ONE_GET_ONE)
         self.assertEqual(promo_1.start_date, date.fromisoformat("2022-07-01"))
         self.assertEqual(promo_1.end_date, date.fromisoformat("2022-07-02"))
-        # promo_1.create()
+        promo_1.create()
         # to test effects of creation, may need to test in routes instead ?
+        # perhaps not -- was a different bug with the DB; should be able to test here as well
         promo_2 = Promotion(name="20 pct off coupon", type=PromoType.PERCENT_DISCOUNT, discount=20, start_date=date.fromisoformat("2022-07-01"), end_date=date.fromisoformat("2022-07-02"))
         self.assertEqual(str(promo_2), "<Promotion '20 pct off coupon' id=[None]>")
         self.assertTrue(promo_2 is not None)
