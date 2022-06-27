@@ -112,3 +112,37 @@ class TestPromotionServer(TestCase):
         #     self.assertEqual(new_promo["customer"], test_promo.customer)
         # self.assertEqual(new_promo["start_date"], test_promo.start_date)
         # self.assertEqual(new_promo["end_date"], test_promo.end_date)
+
+    def test_create_promo_no_data(self):
+        """It should not create a Promotion with missing data"""
+        response = self.app.post(
+            BASE_URL,
+            json={},
+            content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_create_promo_bad_available(self):
+        """It should not create a Promotion with bad available data"""
+        test_promo = PromoFactory()
+        logging.debug(test_promo)
+        # change some data to a bad type:
+        test_promo.type = 2
+        response = self.app.post(
+            BASE_URL,
+            json=test_promo.serialize(),
+            content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_bad_content_type(self):
+        """It should correctly detect a bad content type"""
+        non_json = "text/html"
+        test_promo = PromoFactory()
+        logging.debug(test_promo)
+        response = self.app.post(
+            BASE_URL,
+            json=test_promo.serialize(),
+            content_type=non_json
+        )
+        self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
