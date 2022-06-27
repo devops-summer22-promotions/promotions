@@ -94,3 +94,14 @@ class TestPromotionModel(unittest.TestCase):
         data = "not a serialized dictionary"
         test_promo = Promotion()
         self.assertRaises(DataValidationError, test_promo.deserialize, data)
+        
+    def test_list_all_promotion(self):
+        """It should list all promotions in the database"""
+        promotions = Promotion.all()
+        self.assertEqual(promotions, [])
+        #Create 5 promotions
+        for i in range(5):
+            promo = PromoFactory()
+            promo.create()
+        promotions = Promotion.all()
+        self.assertEqual(len(promotions), 5)
