@@ -105,3 +105,40 @@ class TestPromotionModel(unittest.TestCase):
             promo.create()
         promotions = Promotion.all()
         self.assertEqual(len(promotions), 5)
+        
+    def test_update_a_promotion(self):
+        """It should update a promotion"""
+        promotion = PromoFactory()
+        logging.debug(promotion)
+        promotion.id = None
+        promotion.create()
+        logging.debug(promotion)
+        self.assertIsNotNone(promotion.id)
+        # Change it an save it
+        promotion.type = PromoType.BUY_ONE_GET_ONE
+        original_id = promotion.id
+        promotion.update()
+        self.assertEqual(promotion.id, original_id)
+        self.assertEqual(promotion.type, PromoType.BUY_ONE_GET_ONE)
+        # Fetch it back and make sure the id hasn't changed
+        # but the data did change
+        promotions = Promotion.all()
+        self.assertEqual(len(promotions), 1)
+        self.assertEqual(promotions[0].id, original_id)
+        self.assertEqual(promotions[0].type, PromoType.BUY_ONE_GET_ONE)
+
+    def test_update_no_id(self):
+        """It should not update a promotion with no id"""
+        promotion = PromoFactory()
+        logging.debug(promotion)
+        promotion.id = None
+        self.assertRaises(DataValidationError, promotion.update)
+
+    def test_delete_a_pet(self):
+        """It should Delete a Promotion"""
+        promotion = PromoFactory()
+        promotion.create()
+        self.assertEqual(len(Promotion.all()), 1)
+        # delete the promotion and make sure it isn't in the database
+        promotion.delete()
+        self.assertEqual(len(Promotion.all()), 0)
