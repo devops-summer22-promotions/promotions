@@ -8,6 +8,7 @@ import unittest
 from datetime import date
 from service import app
 from service.models import Promotion, PromoType, DataValidationError, db
+from tests.factories import PromoFactory
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
@@ -94,7 +95,7 @@ class TestPromotionModel(unittest.TestCase):
         data = "not a serialized dictionary"
         test_promo = Promotion()
         self.assertRaises(DataValidationError, test_promo.deserialize, data)
-        
+    
     def test_list_all_promotion(self):
         """It should list all promotions in the database"""
         promotions = Promotion.all()
@@ -105,3 +106,15 @@ class TestPromotionModel(unittest.TestCase):
             promo.create()
         promotions = Promotion.all()
         self.assertEqual(len(promotions), 5)
+
+    def test_find_promotion_by_id(self):
+        """It should find a promotion by id"""
+        promo = PromoFactory()
+        promo.create()
+        db.session.refresh(promo) 
+        id =  promo.id
+        print(f"Created a promotion, id = {promo.id}")
+        inserted_promo = Promotion.find(id)
+        self.assertIsNotNone(inserted_promo)
+
+    
