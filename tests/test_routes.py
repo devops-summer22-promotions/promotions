@@ -135,6 +135,17 @@ class TestPromotionServer(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+    def test_create_promo_bad_method(self):
+        """It should not create a Promotion via a GET request"""
+        test_promo = PromoFactory()
+        logging.debug(test_promo)
+        # attempt promo creation via HTTP GET:
+        response = self.app.get(
+            BASE_URL,
+            json=test_promo.serialize(),
+            content_type=CONTENT_TYPE_JSON
+        )
+
     def test_bad_content_type(self):
         """It should correctly detect a bad content type"""
         non_json = "text/html"
