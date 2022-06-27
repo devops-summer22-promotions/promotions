@@ -87,8 +87,13 @@ class TestPromotionModel(unittest.TestCase):
         self.assertEqual(promo_4.start_date, date.fromisoformat("2022-07-01"))
         self.assertEqual(promo_4.end_date, date.fromisoformat("2022-07-02"))
 
-
         # etc. -- create other promo types; add further tests for sad path, and so forth
+
+    def test_create_promo_bad_deserialize(self):
+        """It should raise an exception when attempting to deserialize bad data"""
+        data = "not a serialized dictionary"
+        test_promo = Promotion()
+        self.assertRaises(DataValidationError, test_promo.deserialize, data)
         
     def test_list_all_promotion(self):
         """It should list all promotions in the database"""
@@ -100,4 +105,3 @@ class TestPromotionModel(unittest.TestCase):
             promo.create()
         promotions = Promotion.all()
         self.assertEqual(len(promotions), 5)
-        
