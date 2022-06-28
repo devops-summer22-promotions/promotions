@@ -8,13 +8,14 @@ import unittest
 from datetime import date
 from service import app
 from service.models import Promotion, PromoType, DataValidationError, db
+from tests.factories import PromoFactory
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/testdb"
 )
 
 ######################################################################
-#  <your resource name>   M O D E L   T E S T   C A S E S
+#  P R O M O T I O N   M O D E L   T E S T   C A S E S
 ######################################################################
 class TestPromotionModel(unittest.TestCase):
     """ Test Cases for Promotion Model """
@@ -134,7 +135,7 @@ class TestPromotionModel(unittest.TestCase):
         promotion.id = None
         self.assertRaises(DataValidationError, promotion.update)
 
-    def test_delete_a_pet(self):
+    def test_delete_a_promotion(self):
         """It should Delete a Promotion"""
         promotion = PromoFactory()
         promotion.create()
