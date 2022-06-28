@@ -23,6 +23,8 @@ CONTENT_TYPE_JSON = "application/json"
 ######################################################################
 # GET INDEX
 ######################################################################
+
+
 @app.route("/")
 def index():
     """ Root URL response """
@@ -34,6 +36,8 @@ def index():
 ######################################################################
 # ADD A NEW PROMOTION
 ######################################################################
+
+
 @app.route("/promotions", methods=["POST"])
 def create_promo():
     """
@@ -78,6 +82,47 @@ def find_promo(promo_id):
 
 
 ######################################################################
+# RETRIEVE A PROMO
+######################################################################
+
+
+@app.route("/promotions/<int:promo_id>", methods=["GET"])
+def get_promo(promo_id):
+    """
+    Retrieve a single Promo
+
+    This endpoint will return a Promo based on it's id
+    """
+    app.logger.info("Request for pet with id: %s", promo_id)
+    promo = Promotion.find(promo_id)
+    if not promo:
+        abort(status.HTTP_404_NOT_FOUND,
+              f"Promo with id '{promo_id}' was not found.")
+
+    app.logger.info("Returning promo: %s", promo.name)
+    return jsonify(promo.serialize()), status.HTTP_200_OK
+
+
+######################################################################
+# DELETE A PROMO
+######################################################################
+@app.route("/promotions/<promo_id>", methods=["DELETE"])
+def delete_promo(promo_id):
+    """
+    Delete a Promo
+
+    This endpoint will delete a Pet based the id specified in the path
+    """
+    app.logger.info("Request to delete promo with id: %s", promo_id)
+    promo = Promotion.find(promo_id)
+    print(promo)
+    if promo:
+        promo.delete()
+
+    app.logger.info("Promo with ID [%s] delete complete.", promo_id)
+    return "", status.HTTP_204_NO_CONTENT
+
+######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
 
@@ -86,6 +131,7 @@ def init_db():
     """ Initializes the SQLAlchemy app """
     global app
     Promotion.init_db(app)
+
 
 def check_content_type(media_type):
     """Checks that the media type is correct"""
