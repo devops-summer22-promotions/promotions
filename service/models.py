@@ -150,3 +150,17 @@ class Promotion(db.Model):
         """
         logger.info("Processing name query for %s ...", name)
         return cls.query.filter(cls.name == name)
+    
+    @classmethod
+    def find_by_type(cls, type: str) -> list:
+        """Returns all of the Promotions in a type
+
+        :param type: the type of the Promotions you want to match
+        :type type: str
+
+        :return: a collection of Promotions in that type
+        :rtype: list
+
+        """
+        logger.info("Processing type query for %s ...", type)
+        return cls.query.filter(cls.type == type)
