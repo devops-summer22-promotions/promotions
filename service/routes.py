@@ -78,29 +78,6 @@ def find_promo(promo_id):
         location_url = url_for("find_promo", promo_id=promo.id, _external=True)
         app.logger.info("Promotion with ID [%s] found.", promo.id)
         return jsonify(message), status.HTTP_200_OK, {"Location": location_url}
-    
-
-
-######################################################################
-# RETRIEVE A PROMO
-######################################################################
-
-
-@app.route("/promotions/<int:promo_id>", methods=["GET"])
-def get_promo(promo_id):
-    """
-    Retrieve a single Promo
-
-    This endpoint will return a Promo based on it's id
-    """
-    app.logger.info("Request for pet with id: %s", promo_id)
-    promo = Promotion.find(promo_id)
-    if not promo:
-        abort(status.HTTP_404_NOT_FOUND,
-              f"Promo with id '{promo_id}' was not found.")
-
-    app.logger.info("Returning promo: %s", promo.name)
-    return jsonify(promo.serialize()), status.HTTP_200_OK
 
 
 ######################################################################
