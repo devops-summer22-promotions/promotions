@@ -18,13 +18,14 @@ class DataValidationError(Exception):
 
     pass
 
+
 class PromoType(Enum):
     """Enumeration of valid Promotion types"""
 
     BUY_ONE_GET_ONE = 0
     PERCENT_DISCOUNT = 1
     FREE_SHIPPING = 2
-    VIP = 3 # can potentially interact w/ customer ID from customers team
+    VIP = 3  # can potentially interact w/ customer ID from customers team
     # etc., as desired
     UNKNOWN = 9
 
@@ -39,11 +40,16 @@ class Promotion(db.Model):
     # Table Schema
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(63))
-    type = db.Column(db.Enum(PromoType), nullable=False, server_default=(PromoType.UNKNOWN.name))
-    discount = db.Column(db.Integer, nullable=True, default=None) # could be a float, or just assume "whole point" percentage discounts as here (and convert later when necessary); null for non-PERCENT_DISCOUNT promos
-    customer = db.Column(db.Integer, nullable=True, default=None) # e.g. for a VIP promotion / promos only applicable to a specific customer -- null by default
-    start_date = db.Column(db.Date(), nullable=False) # date that promotion becomes effective
-    end_date = db.Column(db.Date(), nullable=False) # date after which promotion is no longer effective
+    type = db.Column(db.Enum(PromoType), nullable=False,
+                     server_default=(PromoType.UNKNOWN.name))
+    # could be a float, or just assume "whole point" percentage discounts as here (and convert later when necessary); null for non-PERCENT_DISCOUNT promos
+    discount = db.Column(db.Integer, nullable=True, default=None)
+    # e.g. for a VIP promotion / promos only applicable to a specific customer -- null by default
+    customer = db.Column(db.Integer, nullable=True, default=None)
+    # date that promotion becomes effective
+    start_date = db.Column(db.Date(), nullable=False)
+    # date after which promotion is no longer effective
+    end_date = db.Column(db.Date(), nullable=False)
 
     def __repr__(self):
         return "<Promotion %r id=[%s]>" % (self.name, self.id)
@@ -76,12 +82,12 @@ class Promotion(db.Model):
         """ Serializes a Promotion into a dictionary """
         try:
             serialized = {"id": self.id,
-                        "name": self.name,
-                        "type": self.type.name,
-                        "discount": self.discount,
-                        "customer": self.customer,
-                        "start_date": self.start_date,
-                        "end_date": self.end_date}
+                          "name": self.name,
+                          "type": self.type.name,
+                          "discount": self.discount,
+                          "customer": self.customer,
+                          "start_date": self.start_date,
+                          "end_date": self.end_date}
         except:
             logger.warn("Unable to serialize Promotion data")
             serialized = {}
@@ -97,7 +103,8 @@ class Promotion(db.Model):
         """
         try:
             self.name = data["name"]
-            self.type = getattr(PromoType, data["type"]) # create enum from string
+            # create enum from string
+            self.type = getattr(PromoType, data["type"])
             self.discount = data["discount"]
             self.customer = data["customer"]
             self.start_date = data["start_date"]
