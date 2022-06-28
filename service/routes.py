@@ -88,7 +88,7 @@ def delete_promo(promo_id):
     """
     Delete a Promo
 
-    This endpoint will delete a Pet based the id specified in the path
+    This endpoint will delete a promotion based the id specified in the path
     """
     app.logger.info("Request to delete promo with id: %s", promo_id)
     promo = Promotion.find(promo_id)
@@ -98,6 +98,27 @@ def delete_promo(promo_id):
 
     app.logger.info("Promo with ID [%s] delete complete.", promo_id)
     return "", status.HTTP_204_NO_CONTENT
+
+######################################################################
+# LIST ALL PROMO
+######################################################################
+@app.route("/promotions", methods=["GET"])
+def list_promos():
+    """Returns all of the Promos"""
+    app.logger.info("Request for promo list")
+    promotions = []
+    type = request.args.get("type")
+    name = request.args.get("name")
+    if type:
+        promotions = Promotion.find_by_type(type)
+    elif name:
+        promotions = Promotion.find_by_name(name)
+    else:
+        promotions = Promotion.all()
+
+    results = [promo.serialize() for promo in promotions]
+    app.logger.info("Returning %d promotions", len(results))
+    return jsonify(results), status.HTTP_200_OK
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
