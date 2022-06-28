@@ -157,3 +157,41 @@ class TestPromotionServer(TestCase):
             content_type=non_json
         )
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+    def test_find_promo_by_id(self):
+        """It should create a Promotion and find it by id"""
+        test_promo = PromoFactory()
+        response = self.app.post(
+            BASE_URL,
+            json=test_promo.serialize(),
+            content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        new_promo = response.get_json()
+        id = new_promo["id"]
+
+        response = self.app.get(
+            BASE_URL + '/' + str(id),
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        new_promo_1 = response.get_json()
+        self.assertEqual(new_promo_1["id"], id)
+
+    def test_find_promo_by_id_not_found(self):
+        """It should not find a promotion that doesn't exist"""
+        promotions = Promotion.all()
+        self.assertEqual(promotions, [])
+
+        response = self.app.get(
+            BASE_URL + '/' + '1',
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+    
+    def test_find_promo_by_id_post(self):
+        """It should not find a promotion with post method"""
+        response = self.app.post(
+            BASE_URL + '/' + '1',
+        )
+        self.assertEqual(response.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
