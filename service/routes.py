@@ -51,6 +51,32 @@ def create_promo():
     app.logger.info("Promotion with ID [%s] created.", promo.id)
     return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
 
+
+######################################################################
+# FIND A PROMOTION BY ID
+######################################################################
+@app.route("/promotions/<promo_id>", methods=["GET"])
+def find_promo(promo_id):
+    """
+    Finds a Promotion
+    This endpoint will find a Promotion by id
+    """
+    app.logger.info("Request to find a promotion")
+
+    promo = Promotion.find(promo_id)
+
+    if promo is None:
+        app.logger.info("Promotion with ID [%s] not found.", promo_id)
+        abort(status.HTTP_404_NOT_FOUND, f"Promotion {promo_id} not found.")
+
+    else:
+        message = promo.serialize()
+        location_url = url_for("find_promo", promo_id=promo.id, _external=True)
+        app.logger.info("Promotion with ID [%s] found.", promo.id)
+        return jsonify(message), status.HTTP_200_OK, {"Location": location_url}
+    
+
+
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
