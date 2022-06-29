@@ -27,7 +27,7 @@ sample response data:
 
 ### Create A Promotion
 
-- url: /promotions/create
+- url: /promotions
 - method: POST
 
 sample request data:
