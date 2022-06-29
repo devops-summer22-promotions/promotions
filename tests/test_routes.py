@@ -258,3 +258,20 @@ class TestPromotionServer(TestCase):
         )
         self.assertEqual(response.status_code,
                          status.HTTP_400_BAD_REQUEST)
+        
+    def test_update_promotion(self):
+        """It should Update an existing Promotion"""
+        # create a promotion to update
+        test_promo = PromoFactory()
+        response = self.client.post(BASE_URL, json=test_promo.serialize())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # update the promotion
+        new_promo = response.get_json()
+        id = new_promo["id"]
+        logging.debug(new_promo)
+        new_promo["name"] = "GOOD"
+        response = self.client.put(BASE_URL + '/' + str(id), json=new_promo)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        updated_promo = response.get_json()
+        self.assertEqual(updated_promo["name"], "GOOD")
