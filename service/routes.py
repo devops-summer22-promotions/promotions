@@ -77,6 +77,18 @@ def find_promo(promo_id):
     """
     app.logger.info("Request to find a promotion")
 
+    # check wether the id is a number
+    try:
+        id = int(promo_id)
+    except:
+        app.logger.info("Promotion ID [%s] is not a number.", promo_id)
+        abort(status.HTTP_400_BAD_REQUEST, f"Promotion ID {promo_id} should be a number.")
+
+    # check whether the id is in range
+    if int(promo_id) > 2147483647 or int(promo_id) < 0:
+        app.logger.info("Promotion ID [%s] is out of range.", promo_id)
+        abort(status.HTTP_400_BAD_REQUEST, f"Promotion ID {promo_id} is out of range.")
+    
     promo = Promotion.find(promo_id)
 
     if promo is None:
