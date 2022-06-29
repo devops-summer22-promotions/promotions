@@ -3,6 +3,21 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/Language-Python-blue.svg)](https://python.org/)
 
+- [Seller's Promotion Microservice](#sellers-promotion-microservice)
+  - [Run Steps](#run-steps)
+  - [Implemented APIs](#implemented-apis)
+    - [Root](#root)
+    - [Create A Promotion](#create-a-promotion)
+    - [List All Promotions](#list-all-promotions)
+    - [Read A Promotion](#read-a-promotion)
+    - [Update A Promotion](#update-a-promotion)
+    - [Delete A Promotion](#delete-a-promotion)
+  - [Overview](#overview)
+  - [Automatic Setup](#automatic-setup)
+  - [Manual Setup](#manual-setup)
+  - [Contents](#contents)
+  - [License](#license)
+
 ## Run Steps
 
 - run test: `make test`
@@ -10,7 +25,7 @@
 
 ## Implemented APIs
 
-### Index
+### Root
 
 - url: /
 - method: GET
@@ -84,7 +99,7 @@ sample response data:
 ]
 ```
 
-### Read A Promotion By ID
+### Read A Promotion
 
 - url: /promotions/\<id\>
 - method: GET
