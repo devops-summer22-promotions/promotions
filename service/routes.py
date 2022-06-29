@@ -143,6 +143,30 @@ def list_promos():
     return jsonify(results), status.HTTP_200_OK
 
 ######################################################################
+# UPDATE AN EXISTING PROMOTION
+######################################################################
+@app.route("/promotions/<promo_id>", methods=["PUT"])
+def update_promotions(promo_id):
+    """
+    Update a Promotion
+
+    This endpoint will update a Promotion based the body that is posted
+    """
+    app.logger.info("Request to update promotion with id: %s", promo_id)
+    check_content_type(CONTENT_TYPE_JSON)
+
+    promotion = Promotion.find(promo_id)
+    if not promotion:
+        abort(status.HTTP_404_NOT_FOUND, f"Pet with id '{promo_id}' was not found.")
+
+    promotion.deserialize(request.get_json())
+    promotion.id = promo_id
+    promotion.update()
+
+    app.logger.info("Promotion with ID [%s] updated.", promotion.id)
+    return jsonify(promotion.serialize()), status.HTTP_200_OK
+
+######################################################################
 #  U T I L I T Y   F U N C T I O N S
 ######################################################################
 
