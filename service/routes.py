@@ -52,6 +52,12 @@ def create_promo():
     check_content_type(CONTENT_TYPE_JSON)
     promo = Promotion()
     promo.deserialize(request.get_json())
+    # check to see if this is a duplicate
+    named_promos = Promotion.find_by_name(promo.name)
+    if (named_promos != []):
+        for other_promo in named_promos:
+            if check_duplicate(promo, other_promo):
+                abort(status.HTTP_409_CONFLICT, "Attempt to create duplicate Promotion")
     promo.create()
     message = promo.serialize()
     location_url = url_for("create_promo", promo_id=promo.id, _external=True)
@@ -145,3 +151,13 @@ def check_content_type(media_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         "Content-Type must be {}".format(media_type),
     )
+
+def check_duplicate(p1, p2):
+    """
+    Checks to see if two Promotions are duplicates.
+    Promotions are defined to be duplicates if they have the same
+    name and type.
+    """
+    if (p1.name == p2.name) and (p1.type == p2.type):
+        return True
+    return False
