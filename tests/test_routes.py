@@ -275,3 +275,18 @@ class TestPromotionServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         updated_promo = response.get_json()
         self.assertEqual(updated_promo["name"], "GOOD")
+        
+    def test_update_promotion_not_exists(self):
+        """It should not update a Promotion not exist"""
+        # create a promotion to update
+        test_promo = PromoFactory()
+        response = self.client.post(BASE_URL, json=test_promo.serialize())
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        # update the promotion
+        new_promo = response.get_json()
+        id = new_promo["id"] + 1
+        logging.debug(new_promo)
+        new_promo["name"] = "GOOD"
+        response = self.client.put(BASE_URL + '/' + str(id), json=new_promo)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
