@@ -157,7 +157,7 @@ def update_promotions(promo_id):
 
     promotion = Promotion.find(promo_id)
     if not promotion:
-        abort(status.HTTP_404_NOT_FOUND, f"Pet with id '{promo_id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND, f"Promotion with id '{promo_id}' was not found.")
 
     promotion.deserialize(request.get_json())
     promotion.id = promo_id
