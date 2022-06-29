@@ -164,3 +164,25 @@ class TestPromotionModel(unittest.TestCase):
         print(f"Created a promotion, id = {promo.id}")
         inserted_promo = Promotion.find(id)
         self.assertIsNotNone(inserted_promo)
+
+    def test_find_promotion_by_name(self):
+        """It should find a promotion by name"""
+        promo = PromoFactory()
+        promo.name = "foo"
+        promo.create()
+        db.session.refresh(promo)
+        name = promo.name
+        print(f"Created a promotion, name = {name}")
+        inserted_promo = Promotion.find_by_name(name)
+        self.assertIsNotNone(inserted_promo)
+
+    def test_find_promotion_by_type(self):
+        """It should find a promotion by type"""
+        promo = PromoFactory()
+        promo.name = "foo"
+        promo.create()
+        db.session.refresh(promo)
+        type = promo.type.name
+        print(f"Created a promotion, name = {type}")
+        inserted_promo = Promotion.find_by_type(type)
+        self.assertIsNotNone(inserted_promo)
