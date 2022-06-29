@@ -174,6 +174,23 @@ class TestPromotionServer(TestCase):
             content_type=CONTENT_TYPE_JSON
         )
 
+    def test_create_promo_bad_duplicate(self):
+        """It should not create a duplicate Promotion"""
+        test_promo = PromoFactory()
+        test_promo.name = "foo"
+        response_1 = self.client.post(
+            BASE_URL,
+            json=test_promo.serialize(),
+            content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(response_1.status_code, status.HTTP_201_CREATED)
+        response_2 = self.client.post(
+            BASE_URL,
+            json=test_promo.serialize(),
+            content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(response_2.status_code, status.HTTP_409_CONFLICT)
+
     def test_bad_content_type(self):
         """It should correctly detect a bad content type"""
         non_json = "text/html"

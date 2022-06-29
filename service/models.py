@@ -19,6 +19,8 @@ class DataValidationError(Exception):
     pass
 
 
+VALID_TYPES = ["BUY_ONE_GET_ONE", "PERCENT_DISCOUNT", "FREE_SHIPPING", "VIP"]
+
 class PromoType(Enum):
     """Enumeration of valid Promotion types"""
 
@@ -104,7 +106,11 @@ class Promotion(db.Model):
         try:
             self.name = data["name"]
             # create enum from string
-            self.type = getattr(PromoType, data["type"])
+
+            if (data["type"] in VALID_TYPES):
+                self.type = getattr(PromoType, data["type"])
+            else:
+                raise TypeError
             self.discount = data["discount"]
             self.customer = data["customer"]
             self.start_date = data["start_date"]
