@@ -123,6 +123,33 @@ sample response data:
 - url: /promotions/\<id\>
 - method: PUT
 
+sample request data:
+
+```json
+{
+    "name": "promo 2",
+    "type": "BUY_ONE_GET_ONE",
+    "discount": 1,
+    "customer": 1,
+    "start_date": "2022-6-22",
+    "end_date": "2022-6-25"
+}
+```
+
+sample response data:
+
+```json
+{
+    "customer": 1,
+    "discount": 1,
+    "end_date": "Sat, 25 Jun 2022 00:00:00 GMT",
+    "id": 321,
+    "name": "promo 2",
+    "start_date": "Wed, 22 Jun 2022 00:00:00 GMT",
+    "type": "BUY_ONE_GET_ONE"
+}
+```
+
 ### Delete A Promotion
 
 - url: /promotions/\<id\>
