@@ -3,6 +3,116 @@
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/Language-Python-blue.svg)](https://python.org/)
 
+## Run Steps
+
+- run test: `make test`
+- start server: `make run`
+
+## Implemented APIs
+
+### Index
+
+- url: /
+- method: GET
+
+sample response data:
+
+```json
+{
+    "name": "Promotion REST API Service",
+    "paths": "http://localhost:8000/promotions",
+    "version": "1.0"
+}
+```
+
+### Create A Promotion
+
+- url: /promotions/create
+- method: POST
+
+sample request data:
+
+```json
+{
+    "name": "promo 1",
+    "type": "BUY_ONE_GET_ONE",
+    "discount": 1,
+    "customer": 1,
+    "start_date": "2022-6-22",
+    "end_date": "2022-6-25"
+}
+```
+
+sample response data:
+
+```json
+{
+    "customer": 1,
+    "discount": 1,
+    "end_date": "Sat, 25 Jun 2022 00:00:00 GMT",
+    "id": 243,
+    "name": "promo 1",
+    "start_date": "Wed, 22 Jun 2022 00:00:00 GMT",
+    "type": "BUY_ONE_GET_ONE"
+}
+```
+
+### List All Promotions
+
+- url: /promotions
+- method: GET
+
+sample response data:
+
+```json
+[
+    {
+        "customer": 1,
+        "discount": 1,
+        "end_date": "Sat, 25 Jun 2022 00:00:00 GMT",
+        "id": 243,
+        "name": "promo 1",
+        "start_date": "Wed, 22 Jun 2022 00:00:00 GMT",
+        "type": "BUY_ONE_GET_ONE"
+    },
+    {
+        ...
+    },
+    {
+        ...
+    }
+]
+```
+
+### Read A Promotion By ID
+
+- url: /promotions/\<id\>
+- method: GET
+
+sample response data:
+
+```json
+{
+    "customer": 1,
+    "discount": 1,
+    "end_date": "Sat, 25 Jun 2022 00:00:00 GMT",
+    "id": 243,
+    "name": "promo 1",
+    "start_date": "Wed, 22 Jun 2022 00:00:00 GMT",
+    "type": "BUY_ONE_GET_ONE"
+}
+```
+
+### Update A Promotion
+
+- url: /promotions/\<id\>
+- method: PUT
+
+### Delete A Promotion
+
+- url: /promotions/\<id\>
+- method: DELETE
+
 ## Overview
 
 This project template contains starter code for your class project. The `/service` folder contains your `models.py` file for your model and a `routes.py` file for your service. The `/tests` folder has test case starter code for testing the model and the service separately. All you need to do is add your functionality. You can use the [lab-flask-tdd](https://github.com/nyu-devops/lab-flask-tdd) for code examples to copy from.
