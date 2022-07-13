@@ -2,6 +2,7 @@
 
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/Language-Python-blue.svg)](https://python.org/)
+[![Build](https://github.com/https://github.com/devops-summer22-promotions/promotions/actions/workflows/tdd.yml/badge.svg)](https://github.com/devops-summer22-promotions/promotions/actions)
 
 - [Seller's Promotion Microservice](#sellers-promotion-microservice)
   - [Run Steps](#run-steps)
