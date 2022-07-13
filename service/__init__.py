@@ -16,6 +16,7 @@ app.config.from_object("config")
 # Dependencies require we import the routes AFTER the Flask app is created
 from service import routes, models # pylint: disable=wrong-import-position, wrong-import-order
 from .utils import error_handlers  # pylint: disable=wrong-import-position
+from .utils import cli_commands  # noqa: F401, E402
 
 # Set up logging for production
 log_handlers.init_logging(app, "gunicorn.error")
