@@ -205,7 +205,7 @@ class TestPromotionServer(TestCase):
                          status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
     def test_find_promo_by_id(self):
-        """It should create a Promotion and find it by id"""
+        """It should create a Promotion and find it by ID"""
         test_promo = PromoFactory()
         response = self.client.post(
             BASE_URL,
@@ -225,7 +225,7 @@ class TestPromotionServer(TestCase):
         self.assertEqual(new_promo_1["id"], id)
 
     def test_find_promo_by_id_not_found(self):
-        """It should not find a promotion that doesn't exist"""
+        """It should not find a Promotion that does not exist"""
         promotions = Promotion.all()
         self.assertEqual(promotions, [])
 
@@ -236,7 +236,7 @@ class TestPromotionServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_find_promo_by_id_post(self):
-        """It should not find a promotion with post method"""
+        """It should not find a Promotion via an HTTP POST method"""
         response = self.client.post(
             BASE_URL + '/' + '1',
         )
@@ -244,7 +244,7 @@ class TestPromotionServer(TestCase):
                          status.HTTP_405_METHOD_NOT_ALLOWED)
     
     def test_find_promo_by_id_not_a_number(self):
-        """It should not find a promotion with a non-number id"""
+        """It should not find a Promotion with a non-numeric ID"""
         response = self.client.get(
             BASE_URL + '/' + 'a',
         )
@@ -252,7 +252,7 @@ class TestPromotionServer(TestCase):
                          status.HTTP_400_BAD_REQUEST)
 
     def test_find_promo_by_id_out_of_range(self):
-        """It should not find a promotion with a number out of range"""
+        """It should not find a Promotion with an ID number out of range"""
         response = self.client.get(
             BASE_URL + '/' + '2147483648',
         )
@@ -260,7 +260,7 @@ class TestPromotionServer(TestCase):
                          status.HTTP_400_BAD_REQUEST)
         
     def test_update_promotion(self):
-        """It should Update an existing Promotion"""
+        """It should update an existing Promotion"""
         # create a promotion to update
         test_promo = PromoFactory()
         response = self.client.post(BASE_URL, json=test_promo.serialize())
@@ -277,7 +277,7 @@ class TestPromotionServer(TestCase):
         self.assertEqual(updated_promo["name"], "GOOD")
         
     def test_update_promotion_not_exists(self):
-        """It should not update a Promotion not exist"""
+        """It should not update a Promotion that does not exist"""
         # create a promotion to update
         test_promo = PromoFactory()
         response = self.client.post(BASE_URL, json=test_promo.serialize())
