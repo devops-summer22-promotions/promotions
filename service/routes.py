@@ -69,6 +69,8 @@ def create_promo():
 ######################################################################
 # FIND A PROMOTION BY ID
 ######################################################################
+
+
 @app.route("/promotions/<promo_id>", methods=["GET"])
 def find_promo(promo_id):
     """
@@ -103,8 +105,10 @@ def find_promo(promo_id):
 
 
 ######################################################################
-# DELETE A PROMO
+# DELETE A PROMOTION
 ######################################################################
+
+
 @app.route("/promotions/<promo_id>", methods=["DELETE"])
 def delete_promo(promo_id):
     """
@@ -122,8 +126,10 @@ def delete_promo(promo_id):
     return "", status.HTTP_204_NO_CONTENT
 
 ######################################################################
-# LIST ALL PROMO
+# LIST ALL PROMOTIONS
 ######################################################################
+
+
 @app.route("/promotions", methods=["GET"])
 def list_promos():
     """Returns all of the Promos"""
@@ -142,9 +148,12 @@ def list_promos():
     app.logger.info("Returning %d promotions", len(results))
     return jsonify(results), status.HTTP_200_OK
 
+
 ######################################################################
 # UPDATE AN EXISTING PROMOTION
 ######################################################################
+
+
 @app.route("/promotions/<promo_id>", methods=["PUT"])
 def update_promotions(promo_id):
     """
@@ -165,6 +174,32 @@ def update_promotions(promo_id):
 
     app.logger.info("Promotion with ID [%s] updated.", promotion.id)
     return jsonify(promotion.serialize()), status.HTTP_200_OK
+
+
+######################################################################
+# EARLY CANCEL AN EXISTING PROMOTION
+######################################################################
+
+
+@app.route("/promotions/<promo_id>/cancel", methods=["PUT"])
+def early_cancel_promotion(promo_id):
+    """
+    Cancel a Promotion early
+
+    This endpoint will set the end date of Promotion with ID `promo_id` to its start date.
+    A Promotion with equal start and end dates is semantically considered canceled.
+    """
+    app.logger.info("Request to cancel a Promotion with id: %s", promo_id)
+    # attempt to locate Promotion for early cancellation
+    promotion = Promotion.find(promo_id)
+    if not promotion:
+        abort(status.HTTP_404_NOT_FOUND, f"Promotion with id '{promo_id}' was not found.")
+    # set the information
+    promotion.end_date = promotion.start_date
+    promotion.update()
+    app.logger.info("Promotion with ID [%s] has been canceled.", promotion.id)
+    return jsonify(promotion.serialize()), status.HTTP_200_OK
+
 
 ######################################################################
 #  U T I L I T Y   F U N C T I O N S
