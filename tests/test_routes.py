@@ -290,3 +290,28 @@ class TestPromotionServer(TestCase):
         new_promo["name"] = "GOOD"
         response = self.client.put(BASE_URL + '/' + str(id), json=new_promo)
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_cancel_promotion(self):
+        """It should early cancel a Promotion that exists by setting end_date equal to start_date"""
+        # create a Promotion to cancel
+        test_promo = PromoFactory()
+        response_1 = self.client.post(BASE_URL, json=test_promo.serialize())
+        new_promo = response_1.get_json()
+        self.assertEqual(response_1.status_code, status.HTTP_201_CREATED)
+        # cancel the Promotion that was just created
+        promo_id = new_promo["id"]
+        response_2 = self.client.put(BASE_URL + '/' + str(promo_id) + "/cancel")
+        updated_promo = response_2.get_json()
+        self.assertEqual(response_2.status_code, status.HTTP_200_OK)
+        self.assertEqual(updated_promo["start_date"], updated_promo["end_date"])
+
+    def test_cancel_promotion_not_exists(self):
+        """It should not early cancel a Promotion that does not exist"""
+        # create a Promotion to generate the highest current ID
+        test_promo = PromoFactory()
+        response_1 = self.client.post(BASE_URL, json=test_promo.serialize())
+        new_promo = response_1.get_json()
+        self.assertEqual(response_1.status_code, status.HTTP_201_CREATED)
+        bad_id = new_promo["id"] + 1
+        response_2 = self.client.put(BASE_URL + '/' + str(bad_id) + "/cancel")
+        self.assertEqual(response_2.status_code, status.HTTP_404_NOT_FOUND)
