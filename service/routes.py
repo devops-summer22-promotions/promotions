@@ -135,19 +135,47 @@ def list_promos():
     """Returns all of the Promos"""
     app.logger.info("Request for promo list")
     promotions = []
+
+    # check whether query condition is supported
+    for key in request.args.keys():
+        if not (key in ["type", "name", "discount", "customer", "start_date", "end_date"]):
+            abort(status.HTTP_400_BAD_REQUEST, f"unsupported query condition: {key}")
+
     type = request.args.get("type")
-    name = request.args.get("name")
     if type:
+        app.logger.info("type = %s", type)
         promotions = Promotion.find_by_type(type)
-    elif name:
-        promotions = Promotion.find_by_name(name)
     else:
         promotions = Promotion.all()
+
+    query_name = request.args.get('name')
+    if query_name != None:
+        app.logger.info("name contains %s", query_name)
+        promotions = filter(lambda x: (query_name in x.name), promotions)
+
+    query_discount = request.args.get('discount')
+    if query_discount != None:
+        app.logger.info("discount = %s", query_discount)
+        promotions = filter(lambda x: (int(query_discount) == x.discount), promotions)
+    
+    query_customer = request.args.get('customer')
+    if query_customer != None:
+        app.logger.info("customer = %s", query_customer)
+        promotions = filter(lambda x: (int(query_customer) == x.customer), promotions)
+
+    query_start_date = request.args.get('start_date')
+    if query_start_date != None:
+        app.logger.info("start_date = %s", query_start_date)
+        promotions = filter(lambda x: query_start_date == '{:%Y-%m-%d}'.format(x.start_date), promotions)
+
+    query_end_date = request.args.get('end_date')
+    if query_end_date != None:
+        app.logger.info("end_date = %s", query_end_date)
+        promotions = filter(lambda x: query_end_date == '{:%Y-%m-%d}'.format(x.end_date), promotions)
 
     results = [promo.serialize() for promo in promotions]
     app.logger.info("Returning %d promotions", len(results))
     return jsonify(results), status.HTTP_200_OK
-
 
 ######################################################################
 # UPDATE AN EXISTING PROMOTION
