@@ -141,12 +141,12 @@ def list_promos():
         if not (key in ["type", "name", "discount", "customer", "start_date", "end_date"]):
             abort(status.HTTP_400_BAD_REQUEST, f"unsupported query condition: {key}")
 
-    type = request.args.get("type")
-    if type:
-        app.logger.info("type = %s", type)
-        promotions = Promotion.find_by_type(type)
-    else:
-        promotions = Promotion.all()
+    promotions = Promotion.all()
+
+    query_type = request.args.get('type')
+    if query_type != None:
+        app.logger.info("type = %s", query_type)
+        promotions = filter(lambda x: (query_type == str(x.type.name)), promotions)
 
     query_name = request.args.get('name')
     if query_name != None:
