@@ -15,6 +15,7 @@ from service.utils import status  # HTTP Status Codes
 # helper functions for dealing with datetimes as created by Postgres
 from service.utils.time_management import str_to_dt
 from tests.factories import PromoFactory
+import datetime
 
 
 DATABASE_URI = os.getenv(
@@ -315,3 +316,81 @@ class TestPromotionServer(TestCase):
         bad_id = new_promo["id"] + 1
         response_2 = self.client.put(BASE_URL + '/' + str(bad_id) + "/cancel")
         self.assertEqual(response_2.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_query_promotion(self):
+        """ It should fetch a promotion by query conditions """
+        test_promo = PromoFactory()
+        test_promo.name = "foo"
+        test_promo.type = PromoType.PERCENT_DISCOUNT
+        test_promo.discount = 30
+        test_promo.customer = 123
+        test_promo.start_date = datetime.date(2022, 7, 19)
+        test_promo.end_date = datetime.date(2022, 7, 20)
+
+        logging.debug("Test Promotion: %s", test_promo.serialize())
+        response = self.client.post(
+            BASE_URL,
+            json=test_promo.serialize(),
+            content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+        response = self.client.get(BASE_URL, query_string={
+            "name":"f",
+            "type":"PERCENT_DISCOUNT",
+            "discount":"30",
+            "customer":"123",
+            "start_date":"2022-07-19",
+            "end_date":"2022-07-20",
+        })
+
+        response = self.client.get(BASE_URL)
+        self.assertEqual(len(response.get_json()), 1)
+
+        response = self.client.get(BASE_URL, query_string={
+            "name":"b",
+        })
+        self.assertEqual(len(response.get_json()), 0)
+
+        response = self.client.get(BASE_URL, query_string={
+            "type":"X",
+        })
+        self.assertEqual(len(response.get_json()), 0)
+
+        response = self.client.get(BASE_URL, query_string={
+            "discount":"1",
+        })
+        self.assertEqual(len(response.get_json()), 0)
+
+        response = self.client.get(BASE_URL, query_string={
+            "customer":"20",
+        })
+        self.assertEqual(len(response.get_json()), 0)
+
+        response = self.client.get(BASE_URL, query_string={
+            "start_date":"2022-07-01",
+        })
+        self.assertEqual(len(response.get_json()), 0)
+
+        response = self.client.get(BASE_URL, query_string={
+            "end_date":"2022-07-01",
+        })
+        self.assertEqual(len(response.get_json()), 0)
+
+    def test_query_promotion_unsupported_condition(self):
+        """ It should not fetch a promotion by unsupported query conditions"""
+        test_promo = PromoFactory()
+        logging.debug("Test Promotion: %s", test_promo.serialize())
+        response = self.client.post(
+            BASE_URL,
+            json=test_promo.serialize(),
+            content_type=CONTENT_TYPE_JSON
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        
+        response = self.client.get(BASE_URL, query_string={
+            "unsupported_key":"123"
+        })
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+  
