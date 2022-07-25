@@ -11,11 +11,12 @@ services:
     container_name: nyu
     volumes:
       - ..:/app
+      - ~/.bluemix/apikey.json:/home/vscode/apikey.json
     command: sleep infinity
     environment:
       FLASK_APP: service:app
       FLASK_ENV: development
-      PORT: 8000
+      GUNICORN_BIND: "0.0.0.0:8080"
       DATABASE_URI: postgresql://postgres:postgres@postgres:5432/postgres
     networks:
       - dev
