@@ -38,7 +38,7 @@ def step_impl(context):
         context.resp = requests.delete(f"{rest_endpoint}/{promo['id']}")
         expect(context.resp.status_code).to_equal(204)
 
-    # load the database with new pets
+    # load the database with new promotions
     for row in context.table:
         payload = {
             "name": row['name'],
