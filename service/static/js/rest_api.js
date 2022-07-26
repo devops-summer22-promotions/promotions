@@ -8,23 +8,21 @@ $(function () {
     function update_form_data(res) {
         $("#promotion_id").val(res.id);
         $("#promotion_name").val(res.name);
-        $("#promotion_category").val(res.category);
-        if (res.available == true) {
-            $("#promotion_available").val("true");
-        } else {
-            $("#promotion_available").val("false");
-        }
-        $("#promotion_gender").val(res.gender);
-        $("#promotion_birthday").val(res.birthday);
+        $("#promotion_type").val(res.type);
+        $("#promotion_discount").val(res.discount);
+        $("#promotion_customer").val(res.customer);
+        $("#promotion_start_date").val(res.start_date);
+        $("#promotion_end_date").val(res.end_date);
     }
 
     /// Clears all form fields
     function clear_form_data() {
         $("#promotion_name").val("");
-        $("#promotion_category").val("");
-        $("#promotion_available").val("");
-        $("#promotion_gender").val("");
-        $("#promotion_birthday").val("");
+        $("#promotion_type").val("");
+        $("#promotion_discount").val("");
+        $("#promotion_customer").val("");
+        $("#promotion_start_date").val("");
+        $("#promotion_end_date").val("");
     }
 
     // Updates the flash message area
