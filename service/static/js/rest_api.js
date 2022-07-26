@@ -32,30 +32,32 @@ $(function () {
     }
 
     // ****************************************
-    // Create a Pet
+    // Create a Promotion
     // ****************************************
 
     $("#create-btn").click(function () {
 
         let name = $("#promotion_name").val();
-        let category = $("#promotion_category").val();
-        let available = $("#promotion_available").val() == "true";
-        let gender = $("#promotion_gender").val();
-        let birthday = $("#promotion_birthday").val();
+        let type = $("#promotion_type").val();
+        let discount = $("#promotion_discount").val();
+        let customer = $("#promotion_customer").val();
+        let start_date = $("#promotion_start_date").val();
+        let end_date = $("#promotion_end_date").val();
 
         let data = {
             "name": name,
-            "category": category,
-            "available": available,
-            "gender": gender,
-            "birthday": birthday
+            "type": type,
+            "discount": discount,
+            "customer": customer,
+            "start_date": start_date,
+            "end_date": end_date
         };
 
         $("#flash_message").empty();
         
         let ajax = $.ajax({
             type: "POST",
-            url: "/pets",
+            url: "/promotions",
             contentType: "application/json",
             data: JSON.stringify(data),
         });
