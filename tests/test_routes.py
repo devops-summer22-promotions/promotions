@@ -84,6 +84,14 @@ class TestPromotionServer(TestCase):
         # TODO: check additional information here after we decide what we want the index route to return
         # data = resp.get_json()
         # self.assertEqual(data["name"], "Promotions REST API Service") #, etc.
+        self.assertIn(b"Promotions REST API Service", resp.data)
+
+    def test_health(self):
+        """It should be healthy"""
+        response = self.client.get("/health")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        data = response.get_json()
+        self.assertEqual(data['message'], 'OK')
 
     def test_create_promotion(self):
         """ It should create various kinds of promotions """
