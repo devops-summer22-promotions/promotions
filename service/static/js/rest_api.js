@@ -6,25 +6,25 @@ $(function () {
 
     // Updates the form with data from the response
     function update_form_data(res) {
-        $("#pet_id").val(res.id);
-        $("#pet_name").val(res.name);
-        $("#pet_category").val(res.category);
+        $("#promotion_id").val(res.id);
+        $("#promotion_name").val(res.name);
+        $("#promotion_category").val(res.category);
         if (res.available == true) {
-            $("#pet_available").val("true");
+            $("#promotion_available").val("true");
         } else {
-            $("#pet_available").val("false");
+            $("#promotion_available").val("false");
         }
-        $("#pet_gender").val(res.gender);
-        $("#pet_birthday").val(res.birthday);
+        $("#promotion_gender").val(res.gender);
+        $("#promotion_birthday").val(res.birthday);
     }
 
     /// Clears all form fields
     function clear_form_data() {
-        $("#pet_name").val("");
-        $("#pet_category").val("");
-        $("#pet_available").val("");
-        $("#pet_gender").val("");
-        $("#pet_birthday").val("");
+        $("#promotion_name").val("");
+        $("#promotion_category").val("");
+        $("#promotion_available").val("");
+        $("#promotion_gender").val("");
+        $("#promotion_birthday").val("");
     }
 
     // Updates the flash message area
@@ -39,11 +39,11 @@ $(function () {
 
     $("#create-btn").click(function () {
 
-        let name = $("#pet_name").val();
-        let category = $("#pet_category").val();
-        let available = $("#pet_available").val() == "true";
-        let gender = $("#pet_gender").val();
-        let birthday = $("#pet_birthday").val();
+        let name = $("#promotion_name").val();
+        let category = $("#promotion_category").val();
+        let available = $("#promotion_available").val() == "true";
+        let gender = $("#promotion_gender").val();
+        let birthday = $("#promotion_birthday").val();
 
         let data = {
             "name": name,
@@ -79,12 +79,12 @@ $(function () {
 
     $("#update-btn").click(function () {
 
-        let pet_id = $("#pet_id").val();
-        let name = $("#pet_name").val();
-        let category = $("#pet_category").val();
-        let available = $("#pet_available").val() == "true";
-        let gender = $("#pet_gender").val();
-        let birthday = $("#pet_birthday").val();
+        let promotion_id = $("#promotion_id").val();
+        let name = $("#promotion_name").val();
+        let category = $("#promotion_category").val();
+        let available = $("#promotion_available").val() == "true";
+        let gender = $("#promotion_gender").val();
+        let birthday = $("#promotion_birthday").val();
 
         let data = {
             "name": name,
@@ -98,7 +98,7 @@ $(function () {
 
         let ajax = $.ajax({
                 type: "PUT",
-                url: `/pets/${pet_id}`,
+                url: `/pets/${promotion_id}`,
                 contentType: "application/json",
                 data: JSON.stringify(data)
             })
@@ -120,13 +120,13 @@ $(function () {
 
     $("#retrieve-btn").click(function () {
 
-        let pet_id = $("#pet_id").val();
+        let promotion_id = $("#promotion_id").val();
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
             type: "GET",
-            url: `/pets/${pet_id}`,
+            url: `/pets/${promotion_id}`,
             contentType: "application/json",
             data: ''
         })
@@ -150,13 +150,13 @@ $(function () {
 
     $("#delete-btn").click(function () {
 
-        let pet_id = $("#pet_id").val();
+        let promotion_id = $("#promotion_id").val();
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
             type: "DELETE",
-            url: `/pets/${pet_id}`,
+            url: `/pets/${promotion_id}`,
             contentType: "application/json",
             data: '',
         })
@@ -176,7 +176,7 @@ $(function () {
     // ****************************************
 
     $("#clear-btn").click(function () {
-        $("#pet_id").val("");
+        $("#promotion_id").val("");
         $("#flash_message").empty();
         clear_form_data()
     });
@@ -187,9 +187,9 @@ $(function () {
 
     $("#search-btn").click(function () {
 
-        let name = $("#pet_name").val();
-        let category = $("#pet_category").val();
-        let available = $("#pet_available").val() == "true";
+        let name = $("#promotion_name").val();
+        let category = $("#promotion_category").val();
+        let available = $("#promotion_available").val() == "true";
 
         let queryString = ""
 
