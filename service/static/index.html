@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Pet Demo RESTful Service</title>
+    <title>Promotions RESTful Service</title>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,7 +10,7 @@
   <body>
     <div class="container">
       <div class="page-header">
-          <h1>Pet Demo REST API Service</h1>
+          <h1>Promotions REST API Service</h1>
       </div>
 
       <!-- Flash Message -->
@@ -22,17 +22,18 @@
 
       <!-- FORM -->
       <div class="col-md-12" id="form_data">
-        <h3>Create, Retrieve, Update, and Delete a Pet:</h3>
+        <h3>Create, Retrieve, Update, and Delete a Promotion:</h3>
         <div class="well">
           <div class="form-horizontal">
             <div class="form-group">
-              <label class="control-label col-sm-2" for="pet_id">Pet ID:</label>
+              <label class="control-label col-sm-2" for="promotion_id">Promotion ID:</label>
               <div class="col-sm-6">
-                <input type="text" class="form-control" id="pet_id" placeholder="Enter ID of Pet">
+                <input type="text" class="form-control" id="promotion_id" placeholder="Enter ID of Promotion">
               </div>
               <div class="col-sm-4">
                 <button type="submit" class="btn btn-primary" id="retrieve-btn">Retrieve</button>
                 <button type="submit" class="btn btn-danger" id="delete-btn">Delete</button>
+                <button type="submit" class="btn btn-warning" id="cancel-btn">Cancel Promo</button>
               </div>
             </div>
           </div> <!-- form horizontal -->
@@ -41,51 +42,57 @@
 
             <!-- NAME -->
             <div class="form-group">
-              <label class="control-label col-sm-2" for="pet_name">Name:</label>
+              <label class="control-label col-sm-2" for="promotion_name">Name:</label>
               <div class="col-sm-10">
-                <input type="text" class="form-control" id="pet_name" placeholder="Enter name for Pet">
+                <input type="text" class="form-control" id="promotion_name" placeholder="Enter name for Promotion">
               </div>
             </div>
 
-            <!-- CATEGORY -->
+            <!-- TYPE -->
             <div class="form-group">
-              <label class="control-label col-sm-2" for="pet_category">Category:</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="pet_category" placeholder="Enter category for Pet">
+                <label class="control-label col-sm-2" for="promotion_type">Type:</label>
+                <div class="col-sm-10">
+                  <select class="form-control" id="promotion_type">
+                    <option value="UNKNOWN" selected>Unknown</option>
+                    <option value="BUY_ONE_GET_ONE">BOGO</option>
+                    <option value="PERCENT_DISCOUNT">Percent Discount</option>
+                    <option value="FREE_SHIPPING">Free Shipping</option>
+                    <option value="VIP">VIP</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <!-- AVAILABLE -->
+            <!-- DISCOUNT -->
             <div class="form-group">
-              <label class="control-label col-sm-2" for="pet_available">Available:</label>
-              <div class="col-sm-10">
-                <select class="form-control" id="pet_available">
-                  <option value="true" selected>True</option>
-                  <option value="false">False</option>
-                </select>
+                <label class="control-label col-sm-2" for="promotion_discount">Discount:</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="promotion_discount" placeholder="Enter percent discount for Promotion as a whole number">
+                </div>
               </div>
-            </div>
 
-            <!-- GENDER -->
+            <!-- CUSTOMER -->
             <div class="form-group">
-              <label class="control-label col-sm-2" for="pet_gender">Gender:</label>
-              <div class="col-sm-10">
-                <select class="form-control" id="pet_gender">
-                  <option value="UNKNOWN" selected>Unknown</option>
-                  <option value="MALE">Male</option>
-                  <option value="FEMALE">Female</option>
-                </select>
+                <label class="control-label col-sm-2" for="promotion_customer">Customer ID:</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="promotion_customer" placeholder="Enter customer ID for Promotion, if applicable">
+                </div>
               </div>
-            </div>
 
-            <!-- BIRTHDAY -->
+            <!-- START DATE -->
             <div class="form-group">
-              <label class="control-label col-sm-2" for="pet_birthday">Birthday:</label>
+              <label class="control-label col-sm-2" for="promotion_start_date">Start Date:</label>
               <div class="col-sm-10">
-                <input type="date" class="form-control" id="pet_birthday" placeholder="2020-04-01">
+                <input type="date" class="form-control" id="promotion_start_date" placeholder="2022-07-01">
               </div>
             </div>
 
+            <!-- END DATE -->
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="promotion_end_date">End Date:</label>
+                <div class="col-sm-10">
+                  <input type="date" class="form-control" id="promotion_end_date" placeholder="2020-08-01">
+                </div>
+              </div>
 
             <!-- SUBMIT BUTTONS -->
             <div class="form-group">
@@ -106,11 +113,12 @@
           <thead>
           <tr>
             <th class="col-md-1">ID</th>
-            <th class="col-md-4">Name</th>
-            <th class="col-md-4">Category</th>
-            <th class="col-md-3">Available</th>
-            <th class="col-md-3">Gender</th>
-            <th class="col-md-3">Birthday</th>
+            <th class="col-md-3">Name</th>
+            <th class="col-md-3">Type</th>
+            <th class="col-md-1">Discount</th>
+            <th class="col-md-1">Customer</th>
+            <th class="col-md-3">Start Date</th>
+            <th class="col-md-3">End Date</th>
           </tr>
           </thead>
         </table>
