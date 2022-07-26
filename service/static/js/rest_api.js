@@ -115,7 +115,7 @@ $(function () {
     });
 
     // ****************************************
-    // Retrieve a Pet
+    // Retrieve a Promotion
     // ****************************************
 
     $("#retrieve-btn").click(function () {
@@ -126,7 +126,7 @@ $(function () {
 
         let ajax = $.ajax({
             type: "GET",
-            url: `/pets/${promotion_id}`,
+            url: `/promotions/${promotion_id}`,
             contentType: "application/json",
             data: ''
         })
