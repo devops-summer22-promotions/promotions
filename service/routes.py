@@ -21,21 +21,26 @@ from . import app
 CONTENT_TYPE_JSON = "application/json"
 
 ######################################################################
+# GET HEALTH CHECK
+######################################################################
+
+
+@app.route("/health")
+def healthcheck():
+    """Let them know our heart is still beating"""
+    return make_response(jsonify(status=200, message="OK"), status.HTTP_200_OK)
+
+
+######################################################################
 # GET INDEX
 ######################################################################
 
 
 @app.route("/")
 def index():
-    """ Root URL response """
-    return (
-        jsonify(
-            name="Promotion REST API Service",
-            version="1.0",
-            paths=url_for("list_promos", _external=True),
-        ),
-        status.HTTP_200_OK,
-    )
+    """Base URL for our service"""
+    return app.send_static_file("index.html")
+
 
 ######################################################################
 # ADD A NEW PROMOTION
