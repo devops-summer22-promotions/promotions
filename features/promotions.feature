@@ -41,6 +41,32 @@ Scenario: Create a Promotion
     And I should see "2022-08-01" in the "Start Date" field
     And I should see "2022-09-01" in the "End Date" field
 
+Scenario: Read a Promotion
+    When I visit the "Home Page"
+    And I set the "Name" to "VIP Discount for Customer 34"
+    And I select "VIP" in the "Type" dropdown
+    And I set the "Discount" to "60"
+    And I set the "Customer" to "34"
+    And I set the "Start Date" to "08-07-2022"
+    And I set the "End Date" to "08-15-2022"
+    And I press the "Create" button
+    Then I should see the message "Success"
+    When I copy the "Id" field
+    And I press the "Clear" button
+    Then the "Id" field should be empty
+    And the "Name" field should be empty
+    And the "Type" field should be empty
+    And the "Discount" field should be empty
+    When I paste the "Id" field
+    And I press the "Retrieve" button
+    Then I should see the message "Success"
+    And I should see "VIP Discount for Customer 34" in the "Name" field
+    And I should see "VIP" in the "Type" dropdown
+    And I should see "60" in the "Discount" field
+    And I should see "34" in the "Customer" field
+    And I should see "2022-08-07" in the "Start Date" field
+    And I should see "2022-08-15" in the "End Date" field
+
 # Scenario: List all pets
 #     When I visit the "Home Page"
 #     And I press the "Search" button
