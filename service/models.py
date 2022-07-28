@@ -4,6 +4,7 @@ Models for Promotion
 All of the models are stored in this module
 """
 import logging
+from datetime import date
 from enum import Enum
 from flask_sqlalchemy import SQLAlchemy
 
@@ -88,8 +89,8 @@ class Promotion(db.Model):
                           "type": self.type.name,
                           "discount": self.discount,
                           "customer": self.customer,
-                          "start_date": self.start_date,
-                          "end_date": self.end_date}
+                          "start_date": self.start_date.isoformat(),
+                          "end_date": self.end_date.isoformat()}
         except:
             logger.warn("Unable to serialize Promotion data")
             serialized = {}
@@ -113,8 +114,8 @@ class Promotion(db.Model):
                 raise TypeError
             self.discount = data["discount"]
             self.customer = data["customer"]
-            self.start_date = data["start_date"]
-            self.end_date = data["end_date"]
+            self.start_date = date.fromisoformat(data["start_date"])
+            self.end_date = date.fromisoformat(data["end_date"])
         except KeyError as error:
             raise DataValidationError(
                 "Invalid Promotion: missing " + error.args[0]
