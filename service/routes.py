@@ -57,6 +57,20 @@ def create_promo():
     check_content_type(CONTENT_TYPE_JSON)
     promo = Promotion()
     promo.deserialize(request.get_json())
+
+    # check whether customer id is an integer
+    if promo.customer == "":
+        promo.customer = None
+
+    if promo.customer != None:
+        try:
+            id = int(promo.customer)
+        except:
+            app.logger.info("Customer ID [%s] is not a number.", promo.customer)
+            abort(status.HTTP_400_BAD_REQUEST, f"Customer ID {promo.customer} should be a number.")
+
+    
+
     # check to see if this is a duplicate
     named_promos = Promotion.find_by_name(promo.name)
     if (named_promos != []):
