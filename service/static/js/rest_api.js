@@ -188,26 +188,55 @@ $(function () {
     $("#search-btn").click(function () {
 
         let name = $("#promotion_name").val();
-        let category = $("#promotion_category").val();
-        let available = $("#promotion_available").val() == "true";
+        let type = $("#promotion_type").val();
+        let discount = $("#promotion_discount").val();
+        let customer = $("#promotion_customer").val();
+        let start_date = $("#promotion_start_date").val();
+        let end_date = $("#promotion_end_date").val();
 
         let queryString = ""
 
         if (name) {
             queryString += 'name=' + name
         }
-        if (category) {
+
+        if (type) {
             if (queryString.length > 0) {
-                queryString += '&category=' + category
+                queryString += '&type=' + type
             } else {
-                queryString += 'category=' + category
+                queryString += 'type=' + type
             }
         }
-        if (available) {
+
+        if (discount) {
             if (queryString.length > 0) {
-                queryString += '&available=' + available
+                queryString += '&discount=' + discount
             } else {
-                queryString += 'available=' + available
+                queryString += 'discount=' + discount
+            }
+        }
+
+        if (customer) {
+            if (queryString.length > 0) {
+                queryString += '&customer=' + customer
+            } else {
+                queryString += 'customer=' + customer
+            }
+        }
+
+        if (start_date) {
+            if (queryString.length > 0) {
+                queryString += '&start_date=' + start_date
+            } else {
+                queryString += 'start_date=' + start_date
+            }
+        }
+
+        if (end_date) {
+            if (queryString.length > 0) {
+                queryString += '&end_date=' + end_date
+            } else {
+                queryString += 'end_date=' + end_date
             }
         }
 
@@ -215,7 +244,7 @@ $(function () {
 
         let ajax = $.ajax({
             type: "GET",
-            url: `/pets?${queryString}`,
+            url: `/promotions?${queryString}`,
             contentType: "application/json",
             data: ''
         })
@@ -227,25 +256,26 @@ $(function () {
             table += '<thead><tr>'
             table += '<th class="col-md-2">ID</th>'
             table += '<th class="col-md-2">Name</th>'
-            table += '<th class="col-md-2">Category</th>'
-            table += '<th class="col-md-2">Available</th>'
-            table += '<th class="col-md-2">Gender</th>'
-            table += '<th class="col-md-2">Birthday</th>'
+            table += '<th class="col-md-2">Type</th>'
+            table += '<th class="col-md-1">Discount</th>'
+            table += '<th class="col-md-1">Customer</th>'
+            table += '<th class="col-md-2">Start Date</th>'
+            table += '<th class="col-md-2">End Date</th>'
             table += '</tr></thead><tbody>'
-            let firstPet = "";
+            let firstpromo = "";
             for(let i = 0; i < res.length; i++) {
-                let pet = res[i];
-                table +=  `<tr id="row_${i}"><td>${pet.id}</td><td>${pet.name}</td><td>${pet.category}</td><td>${pet.available}</td><td>${pet.gender}</td><td>${pet.birthday}</td></tr>`;
+                let promo = res[i];
+                table +=  `<tr id="row_${i}"><td>${promo.id}</td><td>${promo.name}</td><td>${promo.type}</td><td>${promo.discount}</td><td>${promo.customer}</td><td>${promo.start_date}</td><td>${promo.end_date}</td></tr>`;
                 if (i == 0) {
-                    firstPet = pet;
+                    firstpromo = promo;
                 }
             }
             table += '</tbody></table>';
             $("#search_results").append(table);
 
             // copy the first result to the form
-            if (firstPet != "") {
-                update_form_data(firstPet)
+            if (firstpromo != "") {
+                update_form_data(firstpromo)
             }
 
             flash_message("Success")
@@ -256,5 +286,8 @@ $(function () {
         });
 
     });
+
+    // clear the selected type so that search can return all promotions
+    clear_form_data();
 
 })

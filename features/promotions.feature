@@ -67,32 +67,75 @@ Scenario: Read a Promotion
     And I should see "2022-08-07" in the "Start Date" field
     And I should see "2022-08-15" in the "End Date" field
 
-# Scenario: List all pets
-#     When I visit the "Home Page"
-#     And I press the "Search" button
-#     Then I should see the message "Success"
-#     And I should see "fido" in the results
-#     And I should see "kitty" in the results
-#     And I should not see "leo" in the results
+Scenario: List all promotions
+    When I visit the "Home Page"
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should see "flash bogo" in the results
+    And I should see "vip 75 off" in the results
+    And I should see "aug freeship" in the results
+    And I should see "25 off sale" in the results
 
-# Scenario: Search for dogs
-#     When I visit the "Home Page"
-#     And I set the "Category" to "dog"
-#     And I press the "Search" button
-#     Then I should see the message "Success"
-#     And I should see "fido" in the results
-#     And I should not see "kitty" in the results
-#     And I should not see "leo" in the results
 
-# Scenario: Search for available
-#     When I visit the "Home Page"
-#     And I select "True" in the "Available" dropdown
-#     And I press the "Search" button
-#     Then I should see the message "Success"
-#     And I should see "fido" in the results
-#     And I should see "kitty" in the results
-#     And I should see "sammy" in the results
-#     And I should not see "leo" in the results
+Scenario: Search for name
+    When I visit the "Home Page"
+    And I set the "Name" to "flash"
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should see "flash bogo" in the results
+    And I should not see "vip 75 off" in the results
+    And I should not see "aug freeship" in the results
+    And I should not see "25 off sale" in the results
+
+Scenario: Search for type
+    When I visit the "Home Page"
+    And I select "VIP" in the "Type" dropdown
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should not see "flash bogo" in the results
+    And I should see "vip 75 off" in the results
+    And I should not see "aug freeship" in the results
+    And I should not see "25 off sale" in the results
+
+Scenario: Search for discount
+    When I visit the "Home Page"
+    And I set the "Discount" to "25"
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should not see "flash bogo" in the results
+    And I should not see "vip 75 off" in the results
+    And I should not see "aug freeship" in the results
+    And I should see "25 off sale" in the results
+
+Scenario: Search for customer
+    When I visit the "Home Page"
+    And I set the "Customer" to "123"
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should not see "flash bogo" in the results
+    And I should see "vip 75 off" in the results
+    And I should not see "aug freeship" in the results
+    And I should not see "25 off sale" in the results
+
+Scenario: Search for start_date
+    When I visit the "Home Page"
+    And I set the "start_date" to "08-01-2022"
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should see "flash bogo" in the results
+    And I should see "vip 75 off" in the results
+    And I should see "aug freeship" in the results
+    And I should not see "25 off sale" in the results
+
+Scenario: Search for end_date
+    When I visit the "Home Page"
+    And I set the "end_date" to "08-31-2022"
+    And I press the "Search" button
+    Then I should see the message "Success"
+    And I should not see "flash bogo" in the results
+    And I should not see "vip 75 off" in the results
+    And I should see "aug freeship" in the results
+    And I should not see "25 off sale" in the results
 
 # Scenario: Update a Pet
 #     When I visit the "Home Page"
