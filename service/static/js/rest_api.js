@@ -77,43 +77,44 @@ $(function () {
     // Update a Promotion
     // ****************************************
 
-    // $("#update-btn").click(function () {
+    $("#update-btn").click(function () {
 
-    //     let name = $("#promotion_name").val();
-    //     let type = $("#promotion_type").val();
-    //     let discount = $("#promotion_discount").val();
-    //     let customer = $("#promotion_customer").val();
-    //     let start_date = $("#promotion_start_date").val();
-    //     let end_date = $("#promotion_end_date").val();
+        let promotion_id = $("#promotion_id").val()
+        let name = $("#promotion_name").val();
+        let type = $("#promotion_type").val();
+        let discount = $("#promotion_discount").val();
+        let customer = $("#promotion_customer").val();
+        let start_date = $("#promotion_start_date").val();
+        let end_date = $("#promotion_end_date").val();
 
-    //     let data = {
-    //         "name": name,
-    //         "type": type,
-    //         "discount": discount,
-    //         "customer": customer,
-    //         "start_date": start_date,
-    //         "end_date": end_date
-    //     };
+        let data = {
+            "name": name,
+            "type": type,
+            "discount": discount,
+            "customer": customer,
+            "start_date": start_date,
+            "end_date": end_date
+        };
 
-    //     $("#flash_message").empty();
+        $("#flash_message").empty();
 
-    //     let ajax = $.ajax({
-    //         type: "PUT",
-    //         url: `/promotions/${promotion_id}`,
-    //         contentType: "application/json",
-    //         data: JSON.stringify(data)
-    //     })
+        let ajax = $.ajax({
+            type: "PUT",
+            url: `/promotions/${promotion_id}`,
+            contentType: "application/json",
+            data: JSON.stringify(data)
+        })
 
-    //     ajax.done(function (res) {
-    //         update_form_data(res)
-    //         flash_message("Success")
-    //     });
+        ajax.done(function (res) {
+            update_form_data(res)
+            flash_message("Success")
+        });
 
-    //     ajax.fail(function (res) {
-    //         flash_message(res.responseJSON.message)
-    //     });
+        ajax.fail(function (res) {
+            flash_message(res.responseJSON.message)
+        });
 
-    // });
+    });
 
     // ****************************************
     // Retrieve a Promotion

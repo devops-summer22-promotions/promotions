@@ -137,27 +137,27 @@ Feature: The promotions management service back-end
         And I should see "aug freeship" in the results
         And I should not see "25 off sale" in the results
 
-    # Scenario: Update a Promotion
-    #     When I visit the "Home Page"
-    #     And I set the "Name" to "flash bogo"
-    #     And I press the "Search" button
-    #     Then I should see the message "Success"
-    #     And I should see "flash bogo" in the "Name" field
-    #     And I should see "BOGO" in the "Type" field
-    #     When I change "Name" to "BOGO"
-    #     And I press the "Update" button
-    #     Then I should see the message "Success"
-    #     When I copy the "Id" field
-    #     And I press the "Clear" button
-    #     And I paste the "Id" field
-    #     And I press the "Retrieve" button
-    #     Then I should see the message "Success"
-    #     And I should see "BOGO" in the "Name" field
-    #     When I press the "Clear" button
-    #     And I press the "Search" button
-    #     Then I should see the message "Success"
-    #     And I should see "Boxer" in the results
-    #     And I should not see "flash bogo" in the results
+    Scenario: Update a Promotion
+        When I visit the "Home Page"
+        And I set the "Name" to "flash bogo"
+        And I press the "Search" button
+        Then I should see the message "Success"
+        And I should see "flash bogo" in the "Name" field
+        And I should see "BUY_ONE_GET_ONE" in the "type" field
+        When I change "Name" to "bogo"
+        And I press the "Update" button
+        Then I should see the message "Success"
+        When I copy the "Id" field
+        And I press the "Clear" button
+        And I paste the "Id" field
+        And I press the "Retrieve" button
+        Then I should see the message "Success"
+        And I should see "bogo" in the "Name" field
+        When I press the "Clear" button
+        And I press the "Search" button
+        Then I should see the message "Success"
+        And I should see "bogo" in the results
+        And I should not see "flash bogo" in the results
 
     Scenario: Delete a Promotion
         When I visit the "Home Page"
