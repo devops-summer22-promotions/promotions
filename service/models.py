@@ -22,6 +22,7 @@ class DataValidationError(Exception):
 
 VALID_TYPES = ["BUY_ONE_GET_ONE", "PERCENT_DISCOUNT", "FREE_SHIPPING", "VIP"]
 
+
 class PromoType(Enum):
     """Enumeration of valid Promotion types"""
 
@@ -70,6 +71,7 @@ class Promotion(db.Model):
         """
         Updates a Promotion to the database
         """
+        logger.info("HAHAH")
         logger.info("Saving %s", self.name)
         if not self.id:
             raise DataValidationError("Update called with empty ID field")
@@ -112,8 +114,8 @@ class Promotion(db.Model):
                 self.type = getattr(PromoType, data["type"])
             else:
                 raise TypeError
-            self.discount = data["discount"]
-            self.customer = data["customer"]
+            self.discount = int(data["discount"])
+            self.customer = int(data["customer"])
             self.start_date = date.fromisoformat(data["start_date"])
             self.end_date = date.fromisoformat(data["end_date"])
         except KeyError as error:
@@ -157,7 +159,7 @@ class Promotion(db.Model):
         """
         logger.info("Processing name query for %s ...", name)
         return cls.query.filter(cls.name == name)
-    
+
     @classmethod
     def find_by_type(cls, type: str) -> list:
         """Returns all of the Promotions in a type
