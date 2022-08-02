@@ -54,7 +54,7 @@ $(function () {
         };
 
         $("#flash_message").empty();
-        
+
         let ajax = $.ajax({
             type: "POST",
             url: "/promotions",
@@ -62,57 +62,58 @@ $(function () {
             data: JSON.stringify(data),
         });
 
-        ajax.done(function(res){
+        ajax.done(function (res) {
             update_form_data(res)
             flash_message("Success")
         });
 
-        ajax.fail(function(res){
+        ajax.fail(function (res) {
             flash_message(res.responseJSON.message)
         });
     });
 
 
     // ****************************************
-    // Update a Pet
+    // Update a Promotion
     // ****************************************
 
-    $("#update-btn").click(function () {
+    // $("#update-btn").click(function () {
 
-        let promotion_id = $("#promotion_id").val();
-        let name = $("#promotion_name").val();
-        let category = $("#promotion_category").val();
-        let available = $("#promotion_available").val() == "true";
-        let gender = $("#promotion_gender").val();
-        let birthday = $("#promotion_birthday").val();
+    //     let name = $("#promotion_name").val();
+    //     let type = $("#promotion_type").val();
+    //     let discount = $("#promotion_discount").val();
+    //     let customer = $("#promotion_customer").val();
+    //     let start_date = $("#promotion_start_date").val();
+    //     let end_date = $("#promotion_end_date").val();
 
-        let data = {
-            "name": name,
-            "category": category,
-            "available": available,
-            "gender": gender,
-            "birthday": birthday
-        };
+    //     let data = {
+    //         "name": name,
+    //         "type": type,
+    //         "discount": discount,
+    //         "customer": customer,
+    //         "start_date": start_date,
+    //         "end_date": end_date
+    //     };
 
-        $("#flash_message").empty();
+    //     $("#flash_message").empty();
 
-        let ajax = $.ajax({
-                type: "PUT",
-                url: `/pets/${promotion_id}`,
-                contentType: "application/json",
-                data: JSON.stringify(data)
-            })
+    //     let ajax = $.ajax({
+    //         type: "PUT",
+    //         url: `/promotions/${promotion_id}`,
+    //         contentType: "application/json",
+    //         data: JSON.stringify(data)
+    //     })
 
-        ajax.done(function(res){
-            update_form_data(res)
-            flash_message("Success")
-        });
+    //     ajax.done(function (res) {
+    //         update_form_data(res)
+    //         flash_message("Success")
+    //     });
 
-        ajax.fail(function(res){
-            flash_message(res.responseJSON.message)
-        });
+    //     ajax.fail(function (res) {
+    //         flash_message(res.responseJSON.message)
+    //     });
 
-    });
+    // });
 
     // ****************************************
     // Retrieve a Promotion
@@ -131,13 +132,13 @@ $(function () {
             data: ''
         })
 
-        ajax.done(function(res){
+        ajax.done(function (res) {
             //alert(res.toSource())
             update_form_data(res)
             flash_message("Success")
         });
 
-        ajax.fail(function(res){
+        ajax.fail(function (res) {
             clear_form_data()
             flash_message(res.responseJSON.message)
         });
@@ -156,17 +157,17 @@ $(function () {
 
         let ajax = $.ajax({
             type: "DELETE",
-            url: `/pets/${promotion_id}`,
+            url: `/promotions/${promotion_id}`,
             contentType: "application/json",
             data: '',
         })
 
-        ajax.done(function(res){
+        ajax.done(function (res) {
             clear_form_data()
-            flash_message("Pet has been Deleted!")
+            flash_message("Promotion has been Deleted!")
         });
 
-        ajax.fail(function(res){
+        ajax.fail(function (res) {
             flash_message("Server error!")
         });
     });
@@ -182,7 +183,7 @@ $(function () {
     });
 
     // ****************************************
-    // Search for a Pet
+    // Search for a Promotion
     // ****************************************
 
     $("#search-btn").click(function () {
@@ -249,7 +250,7 @@ $(function () {
             data: ''
         })
 
-        ajax.done(function(res){
+        ajax.done(function (res) {
             //alert(res.toSource())
             $("#search_results").empty();
             let table = '<table class="table table-striped" cellpadding="10">'
@@ -263,9 +264,9 @@ $(function () {
             table += '<th class="col-md-2">End Date</th>'
             table += '</tr></thead><tbody>'
             let firstpromo = "";
-            for(let i = 0; i < res.length; i++) {
+            for (let i = 0; i < res.length; i++) {
                 let promo = res[i];
-                table +=  `<tr id="row_${i}"><td>${promo.id}</td><td>${promo.name}</td><td>${promo.type}</td><td>${promo.discount}</td><td>${promo.customer}</td><td>${promo.start_date}</td><td>${promo.end_date}</td></tr>`;
+                table += `<tr id="row_${i}"><td>${promo.id}</td><td>${promo.name}</td><td>${promo.type}</td><td>${promo.discount}</td><td>${promo.customer}</td><td>${promo.start_date}</td><td>${promo.end_date}</td></tr>`;
                 if (i == 0) {
                     firstpromo = promo;
                 }
@@ -281,7 +282,7 @@ $(function () {
             flash_message("Success")
         });
 
-        ajax.fail(function(res){
+        ajax.fail(function (res) {
             flash_message(res.responseJSON.message)
         });
 
