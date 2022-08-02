@@ -66,17 +66,18 @@ def create_promo():
         try:
             id = int(promo.customer)
         except:
-            app.logger.info("Customer ID [%s] is not a number.", promo.customer)
-            abort(status.HTTP_400_BAD_REQUEST, f"Customer ID {promo.customer} should be a number.")
-
-    
+            app.logger.info(
+                "Customer ID [%s] is not a number.", promo.customer)
+            abort(status.HTTP_400_BAD_REQUEST,
+                  f"Customer ID {promo.customer} should be a number.")
 
     # check to see if this is a duplicate
     named_promos = Promotion.find_by_name(promo.name)
     if (named_promos != []):
         for other_promo in named_promos:
             if check_duplicate(promo, other_promo):
-                abort(status.HTTP_409_CONFLICT, "Attempt to create duplicate Promotion")
+                abort(status.HTTP_409_CONFLICT,
+                      "Attempt to create duplicate Promotion")
     promo.create()
     message = promo.serialize()
     location_url = url_for("create_promo", promo_id=promo.id, _external=True)
@@ -103,13 +104,15 @@ def find_promo(promo_id):
         id = int(promo_id)
     except:
         app.logger.info("Promotion ID [%s] is not a number.", promo_id)
-        abort(status.HTTP_400_BAD_REQUEST, f"Promotion ID {promo_id} should be a number.")
+        abort(status.HTTP_400_BAD_REQUEST,
+              f"Promotion ID {promo_id} should be a number.")
 
     # check whether the id is in range
     if int(promo_id) > 2147483647 or int(promo_id) < 0:
         app.logger.info("Promotion ID [%s] is out of range.", promo_id)
-        abort(status.HTTP_400_BAD_REQUEST, f"Promotion ID {promo_id} is out of range.")
-    
+        abort(status.HTTP_400_BAD_REQUEST,
+              f"Promotion ID {promo_id} is out of range.")
+
     promo = Promotion.find(promo_id)
 
     if promo is None:
@@ -158,14 +161,16 @@ def list_promos():
     # check whether query condition is supported
     for key in request.args.keys():
         if not (key in ["type", "name", "discount", "customer", "start_date", "end_date"]):
-            abort(status.HTTP_400_BAD_REQUEST, f"unsupported query condition: {key}")
+            abort(status.HTTP_400_BAD_REQUEST,
+                  f"unsupported query condition: {key}")
 
     promotions = Promotion.all()
 
     query_type = request.args.get('type')
     if query_type != None:
         app.logger.info("type = %s", query_type)
-        promotions = filter(lambda x: (query_type == str(x.type.name)), promotions)
+        promotions = filter(lambda x: (
+            query_type == str(x.type.name)), promotions)
 
     query_name = request.args.get('name')
     if query_name != None:
@@ -175,22 +180,26 @@ def list_promos():
     query_discount = request.args.get('discount')
     if query_discount != None:
         app.logger.info("discount = %s", query_discount)
-        promotions = filter(lambda x: (int(query_discount) == x.discount), promotions)
-    
+        promotions = filter(lambda x: (
+            int(query_discount) == x.discount), promotions)
+
     query_customer = request.args.get('customer')
     if query_customer != None:
         app.logger.info("customer = %s", query_customer)
-        promotions = filter(lambda x: (int(query_customer) == x.customer), promotions)
+        promotions = filter(lambda x: (
+            int(query_customer) == x.customer), promotions)
 
     query_start_date = request.args.get('start_date')
     if query_start_date != None:
         app.logger.info("start_date = %s", query_start_date)
-        promotions = filter(lambda x: query_start_date == '{:%Y-%m-%d}'.format(x.start_date), promotions)
+        promotions = filter(lambda x: query_start_date ==
+                            '{:%Y-%m-%d}'.format(x.start_date), promotions)
 
     query_end_date = request.args.get('end_date')
     if query_end_date != None:
         app.logger.info("end_date = %s", query_end_date)
-        promotions = filter(lambda x: query_end_date == '{:%Y-%m-%d}'.format(x.end_date), promotions)
+        promotions = filter(lambda x: query_end_date ==
+                            '{:%Y-%m-%d}'.format(x.end_date), promotions)
 
     results = [promo.serialize() for promo in promotions]
     app.logger.info("Returning %d promotions", len(results))
@@ -211,9 +220,29 @@ def update_promotions(promo_id):
     app.logger.info("Request to update promotion with id: %s", promo_id)
     check_content_type(CONTENT_TYPE_JSON)
 
+    # check wether the id is a number
+    # try:
+    #     id = int(promo_id)
+    # except:
+    #     app.logger.info("Promotion ID [%s] is not a number.", promo_id)
+    #     abort(status.HTTP_400_BAD_REQUEST,
+    #           f"Promotion ID {promo_id} should be a number.")
+
+    # # check whether the id is in range
+    # if int(promo_id) > 2147483647 or int(promo_id) < 0:
+    #     app.logger.info("Promotion ID [%s] is out of range.", promo_id)
+    #     abort(status.HTTP_400_BAD_REQUEST,
+    #           f"Promotion ID {promo_id} is out of range.")
+    data = request.get_json()
+    app.logger.info(data)
+
     promotion = Promotion.find(promo_id)
     if not promotion:
-        abort(status.HTTP_404_NOT_FOUND, f"Promotion with id '{promo_id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND,
+              f"Promotion with id '{promo_id}' was not found.")
+
+    data = request.get_json()
+    app.logger.info(data)
 
     promotion.deserialize(request.get_json())
     promotion.id = promo_id
@@ -240,7 +269,8 @@ def early_cancel_promotion(promo_id):
     # attempt to locate Promotion for early cancellation
     promotion = Promotion.find(promo_id)
     if not promotion:
-        abort(status.HTTP_404_NOT_FOUND, f"Promotion with id '{promo_id}' was not found.")
+        abort(status.HTTP_404_NOT_FOUND,
+              f"Promotion with id '{promo_id}' was not found.")
     # set the information
     promotion.end_date = promotion.start_date
     promotion.update()
@@ -269,6 +299,7 @@ def check_content_type(media_type):
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         "Content-Type must be {}".format(media_type),
     )
+
 
 def check_duplicate(p1, p2):
     """
