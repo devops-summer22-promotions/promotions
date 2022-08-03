@@ -155,7 +155,7 @@ Feature: The promotions management service back-end
         And I should see "bogo" in the "Name" field
         When I press the "Clear" button
         And I press the "Search" button
-        Then I should see the message "Success, updated a promotion"
+        Then I should see the message "Success"
         And I should see "bogo" in the results
         And I should not see "flash bogo" in the results
 
