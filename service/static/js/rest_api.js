@@ -150,14 +150,13 @@ $(function () {
     // ****************************************
 
     $("#cancel-btn").click(function () {
-
         let promotion_id = $("#promotion_id").val();
 
         $("#flash_message").empty();
 
         let ajax = $.ajax({
-            type: "DELETE",
-            url: `/promotions/${promotion_id}`,
+            type: "PUT",
+            url: `/promotions/${promotion_id}/cancel`,
             contentType: "application/json",
             data: ''
         })
