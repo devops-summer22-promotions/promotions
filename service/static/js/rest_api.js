@@ -64,7 +64,7 @@ $(function () {
 
         ajax.done(function (res) {
             update_form_data(res)
-            flash_message("Success")
+            flash_message("Success, created a promotion")
         });
 
         ajax.fail(function (res) {
@@ -107,7 +107,7 @@ $(function () {
 
         ajax.done(function (res) {
             update_form_data(res)
-            flash_message("Success")
+            flash_message("Success, updated a promotion")
         });
 
         ajax.fail(function (res) {
@@ -136,11 +136,38 @@ $(function () {
         ajax.done(function (res) {
             //alert(res.toSource())
             update_form_data(res)
-            flash_message("Success")
+            flash_message("Success, retrieved a promotion")
         });
 
         ajax.fail(function (res) {
+            flash_message(res.responseJSON.message)
+        });
+
+    });
+
+    // ****************************************
+    // Cancel a Promotion
+    // ****************************************
+
+    $("#cancel-btn").click(function () {
+
+        let promotion_id = $("#promotion_id").val();
+
+        $("#flash_message").empty();
+
+        let ajax = $.ajax({
+            type: "DELETE",
+            url: `/promotions/${promotion_id}`,
+            contentType: "application/json",
+            data: ''
+        })
+
+        ajax.done(function (res) {
             clear_form_data()
+            flash_message("Success, promotion has been cancelled!")
+        });
+
+        ajax.fail(function (res) {
             flash_message(res.responseJSON.message)
         });
 
@@ -165,7 +192,7 @@ $(function () {
 
         ajax.done(function (res) {
             clear_form_data()
-            flash_message("Promotion has been Deleted!")
+            flash_message("Success, promotion has been Deleted!")
         });
 
         ajax.fail(function (res) {
