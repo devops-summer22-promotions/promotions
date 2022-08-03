@@ -25,7 +25,7 @@ Feature: The promotions management service back-end
         And I set the "Start Date" to "08-01-2022"
         And I set the "End Date" to "09-01-2022"
         And I press the "Create" button
-        Then I should see the message "Success"
+        Then I should see the message "Success, created a promotion"
         When I copy the "Id" field
         And I press the "Clear" button
         Then the "Id" field should be empty
@@ -34,7 +34,7 @@ Feature: The promotions management service back-end
         And the "Discount" field should be empty
         When I paste the "Id" field
         And I press the "Retrieve" button
-        Then I should see the message "Success"
+        Then I should see the message "Success, retrieved a promotion"
         And I should see "Half-off sale!" in the "Name" field
         And I should see "Percent Discount" in the "Type" dropdown
         And I should see "50" in the "Discount" field
@@ -50,7 +50,7 @@ Feature: The promotions management service back-end
         And I set the "Start Date" to "08-07-2022"
         And I set the "End Date" to "08-15-2022"
         And I press the "Create" button
-        Then I should see the message "Success"
+        Then I should see the message "Success, created a promotion"
         When I copy the "Id" field
         And I press the "Clear" button
         Then the "Id" field should be empty
@@ -59,7 +59,7 @@ Feature: The promotions management service back-end
         And the "Discount" field should be empty
         When I paste the "Id" field
         And I press the "Retrieve" button
-        Then I should see the message "Success"
+        Then I should see the message "Success, retrieved a promotion"
         And I should see "VIP Discount for Customer 34" in the "Name" field
         And I should see "VIP" in the "Type" dropdown
         And I should see "60" in the "Discount" field
@@ -155,7 +155,7 @@ Feature: The promotions management service back-end
         And I should see "bogo" in the "Name" field
         When I press the "Clear" button
         And I press the "Search" button
-        Then I should see the message "Success"
+        Then I should see the message "Success, updated a promotion"
         And I should see "bogo" in the results
         And I should not see "flash bogo" in the results
 
@@ -180,4 +180,27 @@ Feature: The promotions management service back-end
         Then I should see the message "Success"
         When I copy the "Id" field
         And I press the "Delete" button
-        Then I should see the message "Promotion has been Deleted!"
+        Then I should see the message "Success, promotion has been Deleted!"
+
+    Scenario: Cancel a Promotion
+        When I visit the "Home Page"
+        And I set the "Name" to "New customer discount"
+        And I select "VIP" in the "Type" dropdown
+        And I set the "Discount" to "10"
+        And I set the "Customer" to "34"
+        And I set the "Start Date" to "08-07-2022"
+        And I set the "End Date" to "08-15-2022"
+        And I press the "Create" button
+        Then I should see the message "Success"
+        When I copy the "Id" field
+        And I press the "Clear" button
+        Then the "Id" field should be empty
+        And the "Name" field should be empty
+        And the "Type" field should be empty
+        And the "Discount" field should be empty
+        When I paste the "Id" field
+        And I press the "Search" button
+        Then I should see the message "Success"
+        When I copy the "Id" field
+        And I press the "Cancel" button
+        Then I should see the message "Success, promotion has been cancelled!"
