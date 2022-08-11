@@ -7,16 +7,17 @@ Describe what your service does here
 import os
 import sys
 import logging
-from flask import Flask, jsonify, request, url_for, make_response, abort
-from .utils import status  # HTTP Status Codes
+from flask import Flask, jsonify, request, url_for, make_response, render_template, abort
+from flask_restx import Api, Resource, fields, reqparse, inputs
+from .utils import error_handlers, status  # HTTP Status Codes
 
 # For this example we'll use SQLAlchemy, a popular ORM that supports a
 # variety of backends including SQLite, MySQL, and PostgreSQL
 from flask_sqlalchemy import SQLAlchemy
-from service.models import Promotion, DataValidationError
+from service.models import Promotion, PromoType, DataValidationError
 
 # Import Flask application
-from . import app
+from . import app, api
 
 CONTENT_TYPE_JSON = "application/json"
 
@@ -40,6 +41,46 @@ def healthcheck():
 def index():
     """Base URL for our service"""
     return app.send_static_file("index.html")
+
+
+######################################################################
+# DEFINE THE MODEL
+######################################################################
+
+
+create_model = api.model('Promotion', {
+    'name': fields.String(required=True,
+                          description='The name of the Promotion'),
+    'type': fields.String(enum=PromoType._member_names_,
+                          description='The type of the Promotion'),
+    'discount': fields.Integer(required=False,
+                               description='The percent discount represented as an integer'),
+    'customer': fields.Integer(required=False,
+                               description='The specific customer ID associated with a promotion, if applicable'),
+    'start_date': fields.Date(required=True,
+                              description='The date on which the promotion starts (at midnight)'),
+    'end_date': fields.Date(required=True,
+                            description='The date on which the promotion ends (at midnight)')
+})
+
+promotion_model = api.inherit(
+    'PromotionModel',
+    create_model,
+    {
+        '_id': fields.String(readOnly=True, # change to 'id' if this doesn't work; '_id' might be a couchdb thing
+                             description='The unique ID assigned internally by the service')
+    }
+)
+
+
+######################################################################
+# PARSE REQUEST ARGUMENTS
+######################################################################
+
+
+promotion_args = reqparse.RequestParser()
+promotion_args.add_argument('name', type=str, required=False, help='List Promotions by name')
+promotion_args.add_argument('type', type=str, required=False, help='List Promotions by type')
 
 
 ######################################################################
