@@ -90,7 +90,7 @@ promotion_args.add_argument('end_date', type=str, required=False, help='List Pro
 ######################################################################
 #  PATH: /promotions/{id}
 ######################################################################
-@api.route('/promotion/<promo_id>')
+@api.route('/promotions/<promo_id>')
 @api.param('promo_id', 'The Promotion identifier')
 class PromotionResource(Resource):
     """
@@ -116,16 +116,19 @@ class PromotionResource(Resource):
         """
         app.logger.info("Request to Retrieve a promotion with ID [%s]", promo_id)
         promo = Promotion.find(promo_id)
+        if not promo:
+            abort(status.HTTP_404_NOT_FOUND, "Promotion with ID [%s] not found.", promo_id)
+        return promo.serialize(), status.HTTP_200_OK
 
-        if promo is None:
-            app.logger.info("Promotion with ID [%s] not found.", promo_id)
-            abort(status.HTTP_404_NOT_FOUND, f"Promotion {promo_id} not found.")
+        # if promo is None:
+        #     app.logger.info("Promotion with ID [%s] not found.", promo_id)
+        #     abort(status.HTTP_404_NOT_FOUND, f"Promotion {promo_id} not found.")
 
-        else:
-            message = promo.serialize()
-            location_url = api.url_for(PromotionResource, promo_id=promo.id, _external=True)
-            app.logger.info("Promotion with ID [%s] found.", promo.id)
-            return jsonify(message), status.HTTP_200_OK, {"Location": location_url}
+        # else:
+        #     message = promo.serialize()
+        #     location_url = api.url_for(PromotionResource, promo_id=promo.id, _external=True)
+        #     app.logger.info("Promotion with ID [%s] found.", promo.id)
+        #     return jsonify(message), status.HTTP_200_OK, {"Location": location_url}
 
     #------------------------------------------------------------------
     # UPDATE AN EXISTING PROMOTION
@@ -154,7 +157,7 @@ class PromotionResource(Resource):
         return promo.serialize(), status.HTTP_200_OK
 
     #------------------------------------------------------------------
-    # DELETE A PET
+    # DELETE A PROMOTION
     #------------------------------------------------------------------
     @api.doc('delete_promotions')
     @api.response(204, 'Promotion deleted')
