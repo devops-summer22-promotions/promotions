@@ -84,6 +84,99 @@ promotion_args.add_argument('type', type=str, required=False, help='List Promoti
 
 
 ######################################################################
+#  PATH: /promotions/{id}
+######################################################################
+@api.route('/promotion/<promo_id>')
+@api.param('promo_id', 'The Promotion identifier')
+class PromotionResource(Resource):
+    """
+    PromotionResource class
+
+    Allows the manipulation of a single Promotion
+    GET /promotion/{id} - Returns a Promotion with the id
+    PUT /promotion/{id} - Update a Promotion with the id
+    DELETE /promotion/{id} -  Deletes a Promotion with the id
+    """
+
+    #------------------------------------------------------------------
+    # RETRIEVE A PROMOTION
+    #------------------------------------------------------------------
+    @api.doc('get_promotions')
+    @api.response(404, 'Promotion not found')
+    @api.marshal_with(promotion_model)
+    def get(self, promo_id):
+        """
+        Retrieve a single Promotion
+
+        This endpoint will return a Promotion based on its ID
+        """
+        app.logger.info("Request to Retrieve a promotion with ID [%s]", promo_id)
+        promo = Promotion.find(promo_id)
+
+        if promo is None:
+            app.logger.info("Promotion with ID [%s] not found.", promo_id)
+            abort(status.HTTP_404_NOT_FOUND, f"Promotion {promo_id} not found.")
+
+        else:
+            message = promo.serialize()
+            location_url = url_for("find_promo", promo_id=promo.id, _external=True)
+            app.logger.info("Promotion with ID [%s] found.", promo.id)
+            return jsonify(message), status.HTTP_200_OK, {"Location": location_url}
+
+    #------------------------------------------------------------------
+    # UPDATE AN EXISTING PROMOTION
+    #------------------------------------------------------------------
+    @api.doc('update_promotions')
+    @api.response(404, 'Promotion not found')
+    @api.response(400, 'The posted Promotion data was not valid')
+    @api.expect(promotion_model)
+    @api.marshal_with(promotion_model)
+    def put(self, promo_id):
+        """
+        Update a Promotion
+
+        This endpoint will update a Promotion based the body that is posted
+        """
+        app.logger.info('Request to Update a promotion with ID [%s]', promo_id)
+        promo = Promotion.find(promo_id)
+        if not promo:
+            abort(status.HTTP_404_NOT_FOUND, "Promotion with ID '{}' was not found.".format(promo_id))
+        app.logger.debug('Payload = %s', api.payload)
+        data = api.payload
+        promo.deserialize(data)
+        promo.id = promo_id
+        promo.update()
+        app.logger.info("Promotion with ID [%s] updated.", promo.id)
+        return promo.serialize(), status.HTTP_200_OK
+
+    #------------------------------------------------------------------
+    # DELETE A PET
+    #------------------------------------------------------------------
+    @api.doc('delete_promotions')
+    @api.response(204, 'Promotion deleted')
+    def delete(self, promo_id):
+        """
+        Delete a Promotion
+
+        This endpoint will delete a Promotion based the ID specified in the path
+        """
+        app.logger.info('Request to Delete a promotion with ID [%s]', promo_id)
+        promo = Promotion.find(promo_id)
+        if promo:
+            promo.delete()
+            app.logger.info('Promotion with ID [%s] was deleted', promo_id)
+
+        return '', status.HTTP_204_NO_CONTENT
+
+
+
+
+
+#######################
+# ORIGINAL CODE BELOW #
+#######################
+
+######################################################################
 # ADD A NEW PROMOTION
 ######################################################################
 
@@ -127,66 +220,66 @@ def create_promo():
     return jsonify(message), status.HTTP_201_CREATED, {"Location": location_url}
 
 
-######################################################################
-# FIND A PROMOTION BY ID
-######################################################################
+# ######################################################################
+# # FIND A PROMOTION BY ID
+# ######################################################################
 
 
-@app.route("/promotions/<promo_id>", methods=["GET"])
-def find_promo(promo_id):
-    """
-    Finds a Promotion
-    This endpoint will find a Promotion by id
-    """
-    app.logger.info("Request to find a promotion")
+# @app.route("/promotions/<promo_id>", methods=["GET"])
+# def find_promo(promo_id):
+#     """
+#     Finds a Promotion
+#     This endpoint will find a Promotion by id
+#     """
+#     app.logger.info("Request to find a promotion")
 
-    # check wether the id is a number
-    try:
-        id = int(promo_id)
-    except:
-        app.logger.info("Promotion ID [%s] is not a number.", promo_id)
-        abort(status.HTTP_400_BAD_REQUEST,
-              f"Promotion ID {promo_id} should be a number.")
+#     # check wether the id is a number
+#     try:
+#         id = int(promo_id)
+#     except:
+#         app.logger.info("Promotion ID [%s] is not a number.", promo_id)
+#         abort(status.HTTP_400_BAD_REQUEST,
+#               f"Promotion ID {promo_id} should be a number.")
 
-    # check whether the id is in range
-    if int(promo_id) > 2147483647 or int(promo_id) < 0:
-        app.logger.info("Promotion ID [%s] is out of range.", promo_id)
-        abort(status.HTTP_400_BAD_REQUEST,
-              f"Promotion ID {promo_id} is out of range.")
+#     # check whether the id is in range
+#     if int(promo_id) > 2147483647 or int(promo_id) < 0:
+#         app.logger.info("Promotion ID [%s] is out of range.", promo_id)
+#         abort(status.HTTP_400_BAD_REQUEST,
+#               f"Promotion ID {promo_id} is out of range.")
 
-    promo = Promotion.find(promo_id)
+#     promo = Promotion.find(promo_id)
 
-    if promo is None:
-        app.logger.info("Promotion with ID [%s] not found.", promo_id)
-        abort(status.HTTP_404_NOT_FOUND, f"Promotion {promo_id} not found.")
+#     if promo is None:
+#         app.logger.info("Promotion with ID [%s] not found.", promo_id)
+#         abort(status.HTTP_404_NOT_FOUND, f"Promotion {promo_id} not found.")
 
-    else:
-        message = promo.serialize()
-        location_url = url_for("find_promo", promo_id=promo.id, _external=True)
-        app.logger.info("Promotion with ID [%s] found.", promo.id)
-        return jsonify(message), status.HTTP_200_OK, {"Location": location_url}
-
-
-######################################################################
-# DELETE A PROMOTION
-######################################################################
+#     else:
+#         message = promo.serialize()
+#         location_url = url_for("find_promo", promo_id=promo.id, _external=True)
+#         app.logger.info("Promotion with ID [%s] found.", promo.id)
+#         return jsonify(message), status.HTTP_200_OK, {"Location": location_url}
 
 
-@app.route("/promotions/<promo_id>", methods=["DELETE"])
-def delete_promo(promo_id):
-    """
-    Delete a Promo
+# ######################################################################
+# # DELETE A PROMOTION
+# ######################################################################
 
-    This endpoint will delete a promotion based the id specified in the path
-    """
-    app.logger.info("Request to delete promo with id: %s", promo_id)
-    promo = Promotion.find(promo_id)
-    print(promo)
-    if promo:
-        promo.delete()
 
-    app.logger.info("Promo with ID [%s] delete complete.", promo_id)
-    return "", status.HTTP_204_NO_CONTENT
+# @app.route("/promotions/<promo_id>", methods=["DELETE"])
+# def delete_promo(promo_id):
+#     """
+#     Delete a Promo
+
+#     This endpoint will delete a promotion based the id specified in the path
+#     """
+#     app.logger.info("Request to delete promo with id: %s", promo_id)
+#     promo = Promotion.find(promo_id)
+#     print(promo)
+#     if promo:
+#         promo.delete()
+
+#     app.logger.info("Promo with ID [%s] delete complete.", promo_id)
+#     return "", status.HTTP_204_NO_CONTENT
 
 ######################################################################
 # LIST ALL PROMOTIONS
@@ -246,51 +339,51 @@ def list_promos():
     app.logger.info("Returning %d promotions", len(results))
     return jsonify(results), status.HTTP_200_OK
 
-######################################################################
-# UPDATE AN EXISTING PROMOTION
-######################################################################
+# ######################################################################
+# # UPDATE AN EXISTING PROMOTION
+# ######################################################################
 
 
-@app.route("/promotions/<promo_id>", methods=["PUT"])
-def update_promotions(promo_id):
-    """
-    Update a Promotion
+# @app.route("/promotions/<promo_id>", methods=["PUT"])
+# def update_promotions(promo_id):
+#     """
+#     Update a Promotion
 
-    This endpoint will update a Promotion based the body that is posted
-    """
-    app.logger.info("Request to update promotion with id: %s", promo_id)
-    check_content_type(CONTENT_TYPE_JSON)
+#     This endpoint will update a Promotion based the body that is posted
+#     """
+#     app.logger.info("Request to update promotion with id: %s", promo_id)
+#     check_content_type(CONTENT_TYPE_JSON)
 
-    # check wether the id is a number
-    # try:
-    #     id = int(promo_id)
-    # except:
-    #     app.logger.info("Promotion ID [%s] is not a number.", promo_id)
-    #     abort(status.HTTP_400_BAD_REQUEST,
-    #           f"Promotion ID {promo_id} should be a number.")
+#     # check wether the id is a number
+#     # try:
+#     #     id = int(promo_id)
+#     # except:
+#     #     app.logger.info("Promotion ID [%s] is not a number.", promo_id)
+#     #     abort(status.HTTP_400_BAD_REQUEST,
+#     #           f"Promotion ID {promo_id} should be a number.")
 
-    # # check whether the id is in range
-    # if int(promo_id) > 2147483647 or int(promo_id) < 0:
-    #     app.logger.info("Promotion ID [%s] is out of range.", promo_id)
-    #     abort(status.HTTP_400_BAD_REQUEST,
-    #           f"Promotion ID {promo_id} is out of range.")
-    data = request.get_json()
-    app.logger.info(data)
+#     # # check whether the id is in range
+#     # if int(promo_id) > 2147483647 or int(promo_id) < 0:
+#     #     app.logger.info("Promotion ID [%s] is out of range.", promo_id)
+#     #     abort(status.HTTP_400_BAD_REQUEST,
+#     #           f"Promotion ID {promo_id} is out of range.")
+#     data = request.get_json()
+#     app.logger.info(data)
 
-    promotion = Promotion.find(promo_id)
-    if not promotion:
-        abort(status.HTTP_404_NOT_FOUND,
-              f"Promotion with id '{promo_id}' was not found.")
+#     promotion = Promotion.find(promo_id)
+#     if not promotion:
+#         abort(status.HTTP_404_NOT_FOUND,
+#               f"Promotion with id '{promo_id}' was not found.")
 
-    data = request.get_json()
-    app.logger.info(data)
+#     data = request.get_json()
+#     app.logger.info(data)
 
-    promotion.deserialize(request.get_json())
-    promotion.id = promo_id
-    promotion.update()
+#     promotion.deserialize(request.get_json())
+#     promotion.id = promo_id
+#     promotion.update()
 
-    app.logger.info("Promotion with ID [%s] updated.", promotion.id)
-    return jsonify(promotion.serialize()), status.HTTP_200_OK
+#     app.logger.info("Promotion with ID [%s] updated.", promotion.id)
+#     return jsonify(promotion.serialize()), status.HTTP_200_OK
 
 
 ######################################################################
