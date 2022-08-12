@@ -67,7 +67,7 @@ promotion_model = api.inherit(
     'PromotionModel',
     create_model,
     {
-        'id': fields.String(readOnly=True, # change to 'id' if this doesn't work; '_id' might be a couchdb thing
+        'id': fields.Integer(readOnly=True, # change to 'id' if this doesn't work; '_id' might be a couchdb thing
                              description='The unique ID assigned internally by the service')
     }
 )
@@ -248,6 +248,11 @@ class PromotionCollection(Resource):
         promo = Promotion()
         app.logger.debug('Payload = %s', api.payload)
         promo.deserialize(api.payload)
+        # check for empty string fields and convert to null type
+        if promo.customer == "":
+            promo.customer = None
+        if promo.discount == "":
+            promo.discount = None
         # check to see if this is a duplicate
         named_promos = Promotion.find_by_name(promo.name)
         if (named_promos != []):
@@ -283,6 +288,35 @@ class PromotionCollection(Resource):
 
         return '', status.HTTP_204_NO_CONTENT
 
+
+######################################################################
+#  PATH: /promotions/{id}/cancel
+######################################################################
+@api.route('/promotions/<promo_id>/cancel')
+@api.param('pet_id', 'The Pet identifier')
+class CancelResource(Resource):
+    """ Cancel action on a Promotion """
+    @api.doc('cancel_promotion')
+    @api.response(404, 'Promotion not found')
+    @api.response(409, 'The Promotion is not available to be cancelled')
+    def put(self, promo_id):
+        """
+        Cancel a Promotion early
+
+        This endpoint will set the end date of Promotion with ID `promo_id` to its start date.
+        A Promotion with equal start and end dates is semantically considered canceled.
+        """
+        app.logger.info("Request to cancel a Promotion with id: %s", promo_id)
+        # attempt to locate Promotion for early cancellation
+        promotion = Promotion.find(promo_id)
+        if not promotion:
+            abort(status.HTTP_404_NOT_FOUND,
+                f"Promotion with id '{promo_id}' was not found.")
+        # set the information
+        promotion.end_date = promotion.start_date
+        promotion.update()
+        app.logger.info("Promotion with ID [%s] has been canceled.", promotion.id)
+        return promotion.serialize(), status.HTTP_200_OK
 
 
 
