@@ -272,7 +272,7 @@ class TestPromotionServer(TestCase):
             BASE_URL + '/' + 'a',
         )
         self.assertEqual(response.status_code,
-                         status.HTTP_400_BAD_REQUEST)
+                         status.HTTP_404_NOT_FOUND)
 
     # this test is obviated by flask-restx
     # def test_find_promo_by_id_out_of_range(self):
@@ -400,20 +400,19 @@ class TestPromotionServer(TestCase):
         })
         self.assertEqual(len(response.get_json()), 0)
 
-    def test_query_promotion_unsupported_condition(self):
-        """ It should not fetch a promotion by unsupported query conditions"""
-        test_promo = PromoFactory()
-        logging.debug("Test Promotion: %s", test_promo.serialize())
-        response = self.client.post(
-            BASE_URL,
-            json=test_promo.serialize(),
-            content_type=CONTENT_TYPE_JSON
-        )
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+    # Flask-RESTX request parser will silently ignore any bad keys of this sort; no filtering will be applied
+    # def test_query_promotion_unsupported_condition(self):
+    #     """ It should not fetch a promotion by unsupported query conditions"""
+    #     test_promo = PromoFactory()
+    #     logging.debug("Test Promotion: %s", test_promo.serialize())
+    #     response = self.client.post(
+    #         BASE_URL,
+    #         json=test_promo.serialize(),
+    #         content_type=CONTENT_TYPE_JSON
+    #     )
+    #     self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
-        response = self.client.get(BASE_URL, query_string={
-            "unsupported_key":"123"
-        })
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
-  
+    #     response = self.client.get(BASE_URL, query_string={
+    #         "unsupported_key":"123"
+    #     })
+    #     self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
