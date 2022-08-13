@@ -90,7 +90,7 @@ promotion_args.add_argument('end_date', type=str, required=False, help='List Pro
 ######################################################################
 #  PATH: /promotions/{id}
 ######################################################################
-@api.route('/promotions/<promo_id>')
+@api.route('/promotions/<int:promo_id>')
 @api.param('promo_id', 'The Promotion identifier')
 class PromotionResource(Resource):
     """
@@ -117,12 +117,12 @@ class PromotionResource(Resource):
         app.logger.info("Request to Retrieve a promotion with ID [%s]", promo_id)
         promo = Promotion.find(promo_id)
         if not promo:
-            abort(status.HTTP_404_NOT_FOUND, "Promotion with ID [%s] not found.", promo_id)
+            api.abort(status.HTTP_404_NOT_FOUND, "Promotion with ID [%s] not found.".format(promo_id))
         return promo.serialize(), status.HTTP_200_OK
 
         # if promo is None:
         #     app.logger.info("Promotion with ID [%s] not found.", promo_id)
-        #     abort(status.HTTP_404_NOT_FOUND, f"Promotion {promo_id} not found.")
+        #     api.abort(status.HTTP_404_NOT_FOUND, f"Promotion {promo_id} not found.")
 
         # else:
         #     message = promo.serialize()
@@ -147,7 +147,7 @@ class PromotionResource(Resource):
         app.logger.info('Request to Update a promotion with ID [%s]', promo_id)
         promo = Promotion.find(promo_id)
         if not promo:
-            abort(status.HTTP_404_NOT_FOUND, "Promotion with ID '{}' was not found.".format(promo_id))
+            api.abort(status.HTTP_404_NOT_FOUND, "Promotion with ID '{}' was not found.".format(promo_id))
         app.logger.debug('Payload = %s', api.payload)
         data = api.payload
         promo.deserialize(data)
@@ -261,7 +261,7 @@ class PromotionCollection(Resource):
         if (named_promos != []):
             for other_promo in named_promos:
                 if check_duplicate(promo, other_promo):
-                    abort(status.HTTP_409_CONFLICT,
+                    api.abort(status.HTTP_409_CONFLICT,
                         "Attempt to create duplicate Promotion")
         promo.create()
         message = promo.serialize()
@@ -313,7 +313,7 @@ class CancelResource(Resource):
         # attempt to locate Promotion for early cancellation
         promotion = Promotion.find(promo_id)
         if not promotion:
-            abort(status.HTTP_404_NOT_FOUND,
+            api.abort(status.HTTP_404_NOT_FOUND,
                 f"Promotion with id '{promo_id}' was not found.")
         # set the information
         promotion.end_date = promotion.start_date
@@ -582,7 +582,7 @@ def check_content_type(media_type):
     if content_type and content_type == media_type:
         return
     app.logger.error("Invalid Content-Type: %s", content_type)
-    abort(
+    api.abort(
         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
         "Content-Type must be {}".format(media_type),
     )
