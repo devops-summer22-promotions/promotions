@@ -270,26 +270,26 @@ class PromotionCollection(Resource):
         app.logger.info("Promotion with ID [%s] created.", promo.id)
         return promo.serialize(), status.HTTP_201_CREATED, {'Location': location_url}
 
-    #------------------------------------------------------------------
-    # DELETE ALL PETS (for testing only)
-    #------------------------------------------------------------------
-    @api.doc('delete_all_promotions')
-    @api.response(204, 'All Promotions deleted')
-    def delete(self):
-        """
-        Delete all Promotions
+    # #------------------------------------------------------------------
+    # # DELETE ALL PETS (for testing only)
+    # #------------------------------------------------------------------
+    # @api.doc('delete_all_promotions')
+    # @api.response(204, 'All Promotions deleted')
+    # def delete(self):
+    #     """
+    #     Delete all Promotions
 
-        This endpoint will delete all Promotions only if the system is under test
-        """
-        app.logger.info('Request to Delete all promotions...')
-        # NO NEED FOR THIS IN HOMEWORK - CAN JUST CLEAR THE DATABASE TABLE
-        if "TESTING" in app.config and app.config["TESTING"]:
-            Promotion.remove_all()
-            app.logger.info("Removed all Pets from the database")
-        else:
-            app.logger.warning("Request to clear database while system not under test")
+    #     This endpoint will delete all Promotions only if the system is under test
+    #     """
+    #     app.logger.info('Request to Delete all promotions...')
+    #     # NO NEED FOR THIS IN HOMEWORK - CAN JUST CLEAR THE DATABASE TABLE
+    #     if "TESTING" in app.config and app.config["TESTING"]:
+    #         Promotion.remove_all()
+    #         app.logger.info("Removed all Pets from the database")
+    #     else:
+    #         app.logger.warning("Request to clear database while system not under test")
 
-        return '', status.HTTP_204_NO_CONTENT
+    #     return '', status.HTTP_204_NO_CONTENT
 
 
 ######################################################################
@@ -575,17 +575,17 @@ def init_db():
     global app
     Promotion.init_db(app)
 
-
-def check_content_type(media_type):
-    """Checks that the media type is correct"""
-    content_type = request.headers.get("Content-Type")
-    if content_type and content_type == media_type:
-        return
-    app.logger.error("Invalid Content-Type: %s", content_type)
-    api.abort(
-        status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
-        "Content-Type must be {}".format(media_type),
-    )
+# Flask-RESTX only works with JSON content
+# def check_content_type(media_type):
+#     """Checks that the media type is correct"""
+#     content_type = request.headers.get("Content-Type")
+#     if content_type and content_type == media_type:
+#         return
+#     app.logger.error("Invalid Content-Type: %s", content_type)
+#     api.abort(
+#         status.HTTP_415_UNSUPPORTED_MEDIA_TYPE,
+#         "Content-Type must be {}".format(media_type),
+#     )
 
 
 def check_duplicate(p1, p2):
