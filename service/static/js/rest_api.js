@@ -173,7 +173,7 @@ $(function () {
     });
 
     // ****************************************
-    // Delete a Pet
+    // Delete a Promotion
     // ****************************************
 
     $("#delete-btn").click(function () {
