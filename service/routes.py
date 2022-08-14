@@ -192,7 +192,10 @@ class PromotionCollection(Resource):
         """ Returns all of the Promotions """
         app.logger.info('Request to list Promotions...')
         promotions = []
+        app.logger.info('About to parse arguments')
         args = promotion_args.parse_args()
+        app.logger.info('Parsed args successfully')
+        # app.logger.info("args = %s", args)
         promotions = Promotion.all()
 
         if args['type']:
