@@ -186,14 +186,21 @@ class PromotionCollection(Resource):
     # LIST ALL PROMOTIONS
     #------------------------------------------------------------------
     @api.doc('list_promotions')
-    @api.expect(promotion_args, validate=True)
+    # @api.expect(promotion_args, validate=True)
     @api.marshal_list_with(promotion_model)
     def get(self):
         """ Returns all of the Promotions """
         app.logger.info('Request to list Promotions...')
         promotions = []
         app.logger.info('About to parse arguments')
-        args = promotion_args.parse_args()
+        # args = promotion_args.parse_args()
+        args = {}
+        args["name"] = request.args.get("name")
+        args["type"] = request.args.get("type")
+        args["discount"] = request.args.get("discount")
+        args["customer"] = request.args.get("customer")
+        args["start_date"] = request.args.get("start_date")
+        args["end_date"] = request.args.get("end_date")
         app.logger.info('Parsed args successfully')
         # app.logger.info("args = %s", args)
         promotions = Promotion.all()
