@@ -31,7 +31,7 @@ from compare import expect
 def step_impl(context):
     """ Delete all Promotions and load new ones """
     # List all of the promotions and delete them one by one
-    rest_endpoint = f"{context.BASE_URL}/promotions"
+    rest_endpoint = f"{context.BASE_URL}/api/promotions"
     context.resp = requests.get(rest_endpoint)
     expect(context.resp.status_code).to_equal(200)
     for promo in context.resp.json():
