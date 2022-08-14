@@ -32,6 +32,16 @@ If you want to confirm that this worked:
 
 ### Managing Kubernetes deployments on IBM Cloud
 
+List all namespaces:
+
+`kc get ns`
+
+Create namespaces for application if not already present:
+
+`kc create namespace dev`
+
+`kc create namespace prod`
+
 List all things managed by Kubernetes:
 
 `kc get all`
