@@ -1,116 +1,123 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Promotions RESTful Service</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="static/css/cerulean_bootstrap.min.css">
-  </head>
-  <body>
-    <div class="container">
-      <div class="page-header">
-          <h1>Promotions REST API Service</h1>
-      </div>
 
-      <!-- Flash Message -->
-      <div class="table-responsive">
-        <table class="table">
-          <tr><td>Status:</td><td><span id="flash_message"></span></td></tr>
-        </table>
-      </div>
+<head>
+  <title>Promotions RESTful Service</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="static/css/cerulean_bootstrap.min.css">
+</head>
 
-      <!-- FORM -->
-      <div class="col-md-12" id="form_data">
-        <h3>Create, Retrieve, Update, and Delete a Promotion:</h3>
-        <div class="well">
-          <div class="form-horizontal">
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="promotion_id">Promotion ID:</label>
-              <div class="col-sm-6">
-                <input type="text" class="form-control" id="promotion_id" placeholder="Enter ID of Promotion">
-              </div>
-              <div class="col-sm-4">
-                <button type="submit" class="btn btn-primary" id="retrieve-btn">Retrieve</button>
-                <button type="submit" class="btn btn-danger" id="delete-btn">Delete</button>
-                <button type="submit" class="btn btn-warning" id="cancel-btn">Cancel Promo</button>
-              </div>
+<body>
+  <div class="container">
+    <div class="page-header">
+      <h1>Promotions REST API Service</h1>
+    </div>
+
+    <!-- Flash Message -->
+    <div class="table-responsive">
+      <table class="table">
+        <tr>
+          <td>Status:</td>
+          <td><span id="flash_message"></span></td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- FORM -->
+    <div class="col-md-12" id="form_data">
+      <h3>Create, Retrieve, Update, and Delete a Promotion:</h3>
+      <div class="well">
+        <div class="form-horizontal">
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="promotion_id">Promotion ID:</label>
+            <div class="col-sm-6">
+              <input type="text" class="form-control" id="promotion_id" placeholder="Enter ID of Promotion">
             </div>
-          </div> <!-- form horizontal -->
-
-          <div class="form-horizontal">
-
-            <!-- NAME -->
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="promotion_name">Name:</label>
-              <div class="col-sm-10">
-                <input type="text" class="form-control" id="promotion_name" placeholder="Enter name for Promotion">
-              </div>
+            <div class="col-sm-4">
+              <button type="submit" class="btn btn-primary" id="retrieve-btn">Retrieve</button>
+              <button type="submit" class="btn btn-danger" id="delete-btn">Delete</button>
+              <button type="submit" class="btn btn-warning" id="cancel-btn">Cancel Promo</button>
             </div>
+          </div>
+        </div> <!-- form horizontal -->
 
-            <!-- TYPE -->
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="promotion_type">Type:</label>
-                <div class="col-sm-10">
-                  <select class="form-control" id="promotion_type">
-                    <option value="UNKNOWN" selected>Unknown</option>
-                    <option value="BUY_ONE_GET_ONE">BOGO</option>
-                    <option value="PERCENT_DISCOUNT">Percent Discount</option>
-                    <option value="FREE_SHIPPING">Free Shipping</option>
-                    <option value="VIP">VIP</option>
-                  </select>
-                </div>
-              </div>
+        <div class="form-horizontal">
 
-            <!-- DISCOUNT -->
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="promotion_discount">Discount:</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="promotion_discount" placeholder="Enter percent discount for Promotion as a whole number">
-                </div>
-              </div>
-
-            <!-- CUSTOMER -->
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="promotion_customer">Customer ID:</label>
-                <div class="col-sm-10">
-                  <input type="text" class="form-control" id="promotion_customer" placeholder="Enter customer ID for Promotion, if applicable">
-                </div>
-              </div>
-
-            <!-- START DATE -->
-            <div class="form-group">
-              <label class="control-label col-sm-2" for="promotion_start_date">Start Date:</label>
-              <div class="col-sm-10">
-                <input type="date" class="form-control" id="promotion_start_date" placeholder="2022-07-01">
-              </div>
+          <!-- NAME -->
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="promotion_name">Name:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="promotion_name" placeholder="Enter name for Promotion">
             </div>
+          </div>
 
-            <!-- END DATE -->
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="promotion_end_date">End Date:</label>
-                <div class="col-sm-10">
-                  <input type="date" class="form-control" id="promotion_end_date" placeholder="2022-08-01">
-                </div>
-              </div>
-
-            <!-- SUBMIT BUTTONS -->
-            <div class="form-group">
-              <div class="col-sm-offset-2 col-sm-10">
-                <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
-                <button type="submit" class="btn btn-primary" id="clear-btn">Clear</button>
-                <button type="submit" class="btn btn-success" id="create-btn">Create</button>
-                <button type="submit" class="btn btn-warning" id="update-btn">Update</button>
-              </div>
+          <!-- TYPE -->
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="promotion_type">Type:</label>
+            <div class="col-sm-10">
+              <select class="form-control" id="promotion_type">
+                <option value="UNKNOWN" selected>Unknown</option>
+                <option value="BUY_ONE_GET_ONE">BOGO</option>
+                <option value="PERCENT_DISCOUNT">Percent Discount</option>
+                <option value="FREE_SHIPPING">Free Shipping</option>
+                <option value="VIP">VIP</option>
+              </select>
             </div>
-          </div> <!-- form horizontal -->
-        </div> <!-- end well -->
-      </div> <!-- end Form -->
+          </div>
 
-      <!-- Search Results -->
-      <div class="table-responsive col-md-12" id="search_results">
-        <table class="table table-striped">
-          <thead>
+          <!-- DISCOUNT -->
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="promotion_discount">Discount:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="promotion_discount"
+                placeholder="Enter percent discount for Promotion as a whole number">
+            </div>
+          </div>
+
+          <!-- CUSTOMER -->
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="promotion_customer">Customer ID:</label>
+            <div class="col-sm-10">
+              <input type="text" class="form-control" id="promotion_customer"
+                placeholder="Enter customer ID for Promotion, if applicable">
+            </div>
+          </div>
+
+          <!-- START DATE -->
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="promotion_start_date">Start Date:</label>
+            <div class="col-sm-10">
+              <input type="date" class="form-control" id="promotion_start_date" placeholder="2022-07-01">
+            </div>
+          </div>
+
+          <!-- END DATE -->
+          <div class="form-group">
+            <label class="control-label col-sm-2" for="promotion_end_date">End Date:</label>
+            <div class="col-sm-10">
+              <input type="date" class="form-control" id="promotion_end_date" placeholder="2022-08-01">
+            </div>
+          </div>
+
+          <!-- SUBMIT BUTTONS -->
+          <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+              <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
+              <button type="submit" class="btn btn-primary" id="clear-btn">Clear</button>
+              <button type="submit" class="btn btn-success" id="create-btn">Create</button>
+              <button type="submit" class="btn btn-warning" id="update-btn">Update</button>
+            </div>
+          </div>
+        </div> <!-- form horizontal -->
+      </div> <!-- end well -->
+    </div> <!-- end Form -->
+
+    <!-- Search Results -->
+    <div class="table-responsive col-md-12" id="search_results">
+      <table class="table table-striped">
+        <thead>
           <tr>
             <th class="col-md-1">ID</th>
             <th class="col-md-3">Name</th>
@@ -120,22 +127,23 @@
             <th class="col-md-3">Start Date</th>
             <th class="col-md-3">End Date</th>
           </tr>
-          </thead>
-        </table>
-      </div>
+        </thead>
+      </table>
+    </div>
+    <p>API Documentation for the promotions microservice is <a href='/apidocs'>here</a></p>
+    <footer>
+      <br><br>
+      <p>&copy; NYU DevOps Company 2022</p>
+    </footer>
 
-      <footer>
-        <br><br>
-        <p>&copy; NYU DevOps Company 2022</p>
-      </footer>
+  </div> <!-- container -->
 
-    </div> <!-- container -->
-
-  <script type="text/javascript" src = "static/js/jquery-3.6.0.min.js"></script>
-  <script type="text/javascript" src = "static/js/bootstrap.min.js"></script>
+  <script type="text/javascript" src="static/js/jquery-3.6.0.min.js"></script>
+  <script type="text/javascript" src="static/js/bootstrap.min.js"></script>
 
   <!-- YOUR REST API -->
   <script type="text/javascript" src="static/js/rest_api.js"></script>
 
-  </body>
+</body>
+
 </html>
