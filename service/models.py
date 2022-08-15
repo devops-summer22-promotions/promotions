@@ -149,7 +149,7 @@ class Promotion(db.Model):
         return cls.query.get(by_id)
 
     @classmethod
-    def find_by_name(cls, name):
+    def find_by_name(cls, name: str) -> list:
         """Returns all Promotions with the given name
 
         Args:
@@ -163,7 +163,7 @@ class Promotion(db.Model):
         """Returns all of the Promotions in a type
 
         :param type: the type of the Promotions you want to match
-        :type type: str
+        :type of type: str
 
         :return: a collection of Promotions in that type
         :rtype: list
@@ -171,3 +171,64 @@ class Promotion(db.Model):
         """
         logger.info("Processing type query for %s ...", type)
         return cls.query.filter(cls.type == type)
+
+
+    @classmethod
+    def find_by_discount(cls, discount) -> list:
+        """Returns all of the Promotions with same discount rate
+
+        :param discount: the discount rate of the Promotions you want to match
+        :type of discount: integer
+
+        :return: a collection of Promotions with same discount rate
+        :rtype: list
+
+        """
+        logger.info("Processing discount query for %s ...", discount)
+        return cls.query.filter(cls.discount == discount)
+
+
+    @classmethod
+    def find_by_customer(cls, customer) -> list:
+        """Returns all of the Promotions under same customer ID
+
+        :param customer: the customer ID of the Promotions you want to match
+        :type of customer: integer
+
+        :return: a collection of Promotions under same customer ID
+        :rtype: list
+
+        """
+        logger.info("Processing customer ID query for %s ...", customer)
+        return cls.query.filter(cls.customer == customer)
+
+
+    @classmethod
+    def find_by_start_date(cls, start_date) -> list:
+        """Returns all of the Promotions under same start_date
+
+        :param type: the start_date of the Promotions you want to match
+        :type of start_date: Date()
+
+        :return: a collection of Promotions under same start_date
+        :rtype: list
+
+        """
+        logger.info("Processing start_date query for %s ...", start_date)
+        return cls.query.filter(cls.start_date == start_date)
+        
+
+    @classmethod
+    def find_by_end_date(cls, end_date) -> list:
+        """Returns all of the Promotions under same end_date
+
+        :param type: the end_date of the Promotions you want to match
+        :type of end_date: Date()
+
+        :return: a collection of Promotions under same end_date
+        :rtype: list
+
+        """
+        logger.info("Processing end_date query for %s ...", end_date)
+        return cls.query.filter(cls.end_date == end_date)
+
