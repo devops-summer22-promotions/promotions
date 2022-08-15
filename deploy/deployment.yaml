@@ -14,8 +14,8 @@ spec:
       labels:
         app: promotions
     spec:
-      # imagePullSecrets:
-      # - name: all-icr-io
+      imagePullSecrets:
+      - name: all-icr-io
       restartPolicy: Always
       containers:
       - name: promotions
