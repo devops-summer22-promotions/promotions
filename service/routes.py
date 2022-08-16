@@ -192,45 +192,71 @@ class PromotionCollection(Resource):
         args["start_date"] = request.args.get("start_date")
         args["end_date"] = request.args.get("end_date")
         app.logger.info('Parsed args successfully')
-        # app.logger.info("args = %s", args)
-        promotions = Promotion.all()
+        app.logger.info("args = %s", args)
+        # promotions = Promotion.all()
+        promotions = []
+        filtered = False
 
         if args['type']:
+            filtered = True
             query_type = args['type']
+            # flask-restx request parsing is not working, so manually check this enum for bad argument
+            if query_type not in ['BUY_ONE_GET_ONE', 'PERCENT_DISCOUNT', 'FREE_SHIPPING', 'VIP', 'UNKNOWN']:
+                return "Bad query argument for type", status.HTTP_400_BAD_REQUEST
             app.logger.info("type = %s", query_type)
-            promotions = filter(lambda x: (
-                query_type == str(x.type.name)), promotions)
+            promotions += Promotion.find_by_type(query_type)
 
         if args['name']:
+            filtered = True
             query_name = args['name']
             app.logger.info("name contains %s", query_name)
-            promotions = filter(lambda x: (query_name in x.name), promotions)
+            promotions += Promotion.find_by_name(query_name)
 
         if args['discount']:
+            filtered = True
             query_discount = args['discount']
             app.logger.info("discount = %s", query_discount)
-            promotions = filter(lambda x: (
-                int(query_discount) == x.discount), promotions)
+            promotions += Promotion.find_by_discount(query_discount)
 
         if args['customer']:
+            filtered = True
             query_customer = args['customer']
             app.logger.info("customer = %s", query_customer)
-            promotions = filter(lambda x: (
-                int(query_customer) == x.customer), promotions)
+            promotions += Promotion.find_by_customer(query_customer)
 
         if args['start_date']:
+            filtered = True
             query_start_date = args['start_date']
             app.logger.info("start_date = %s", query_start_date)
-            promotions = filter(lambda x: query_start_date ==
-                                '{:%Y-%m-%d}'.format(x.start_date), promotions)
+            promotions += Promotion.find_by_start_date(query_start_date)
 
         if args['end_date']:
+            filtered = True
             query_end_date = args['end_date']
             app.logger.info("end_date = %s", query_end_date)
-            promotions = filter(lambda x: query_end_date ==
-                                '{:%Y-%m-%d}'.format(x.end_date), promotions)
+            promotions += Promotion.find_by_end_date(query_end_date)
+
+        app.logger.info(f"promotions: \n{promotions}")
+
+        # kludgy check for no match on query
+        # if len(promotions) == 1 and filtered:
+        #     test_serialize = promotions[0].serialize()
+        #     if all([True for item in list(test_serialize.values()) if item is None]):
+        #         return "No results found for query string", status.HTTP_404_NOT_FOUND
+
+        if promotions == []:
+            if filtered:
+                return "No results found for query string", status.HTTP_404_NOT_FOUND
+            else:
+                # if we didn't have any filters, just return all promotions in the database
+                promotions = Promotion.all()
+        else:
+            # remove dupes if multiple filters found the same promotions in the database
+            promotions = list(set(promotions))
 
         results = [promo.serialize() for promo in promotions]
+        if not isinstance(results, list):
+            results = [results]
         app.logger.info("Returning %d promotions", len(results))
         return results, status.HTTP_200_OK
 

@@ -359,7 +359,7 @@ class TestPromotionServer(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         
         response = self.client.get(BASE_URL, query_string={
-            "name":"f",
+            "name":"foo",
             "type":"PERCENT_DISCOUNT",
             "discount":"30",
             "customer":"123",
@@ -367,38 +367,37 @@ class TestPromotionServer(TestCase):
             "end_date":"2022-07-20",
         })
 
-        response = self.client.get(BASE_URL)
         self.assertEqual(len(response.get_json()), 1)
 
         response = self.client.get(BASE_URL, query_string={
-            "name":"b",
+            "name":"bad_name",
         })
-        self.assertEqual(len(response.get_json()), 0)
+        self.assertEqual(None, response.get_json()['name'])
 
         response = self.client.get(BASE_URL, query_string={
             "type":"X",
         })
-        self.assertEqual(len(response.get_json()), 0)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         response = self.client.get(BASE_URL, query_string={
             "discount":"1",
         })
-        self.assertEqual(len(response.get_json()), 0)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         response = self.client.get(BASE_URL, query_string={
             "customer":"20",
         })
-        self.assertEqual(len(response.get_json()), 0)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         response = self.client.get(BASE_URL, query_string={
             "start_date":"2022-07-01",
         })
-        self.assertEqual(len(response.get_json()), 0)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
         response = self.client.get(BASE_URL, query_string={
             "end_date":"2022-07-01",
         })
-        self.assertEqual(len(response.get_json()), 0)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
     # Flask-RESTX request parser will silently ignore any bad keys of this sort; no filtering will be applied
     # def test_query_promotion_unsupported_condition(self):
