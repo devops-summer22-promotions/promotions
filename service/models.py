@@ -156,7 +156,7 @@ class Promotion(db.Model):
             name (string): the name of the Promotions you want to match
         """
         logger.info("Processing name query for %s ...", name)
-        return cls.query.filter(cls.name == name)
+        return cls.query.filter(cls.name.contains(name))
     
     @classmethod
     def find_by_type(cls, type: str) -> list:
