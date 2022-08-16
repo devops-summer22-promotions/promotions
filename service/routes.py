@@ -198,37 +198,35 @@ class PromotionCollection(Resource):
         if args['type']:
             query_type = args['type']
             app.logger.info("type = %s", query_type)
-            promotions = filter(lambda x: (
-                query_type == str(x.type.name)), promotions)
+            promotions = Promotion.find_by_type(cls, query_type)
+
 
         if args['name']:
             query_name = args['name']
             app.logger.info("name contains %s", query_name)
-            promotions = filter(lambda x: (query_name in x.name), promotions)
+            promotions = Promotion.find_by_name(cls, query_name)
 
         if args['discount']:
             query_discount = args['discount']
             app.logger.info("discount = %s", query_discount)
-            promotions = filter(lambda x: (
-                int(query_discount) == x.discount), promotions)
+            promotions = Promotion.find_by_discount(cls, query_discount)
+
 
         if args['customer']:
             query_customer = args['customer']
             app.logger.info("customer = %s", query_customer)
-            promotions = filter(lambda x: (
-                int(query_customer) == x.customer), promotions)
+            promotions = Promotion.find_by_customer(cls, query_customer)
+
 
         if args['start_date']:
             query_start_date = args['start_date']
             app.logger.info("start_date = %s", query_start_date)
-            promotions = filter(lambda x: query_start_date ==
-                                '{:%Y-%m-%d}'.format(x.start_date), promotions)
+            promotions = Promotion.find_by_start_date(cls, query_start_date)
 
         if args['end_date']:
             query_end_date = args['end_date']
             app.logger.info("end_date = %s", query_end_date)
-            promotions = filter(lambda x: query_end_date ==
-                                '{:%Y-%m-%d}'.format(x.end_date), promotions)
+            promotions = Promotion.find_by_end_date(cls, query_end_date)
 
         results = [promo.serialize() for promo in promotions]
         app.logger.info("Returning %d promotions", len(results))
