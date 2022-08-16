@@ -218,13 +218,11 @@ class PromotionCollection(Resource):
             app.logger.info("discount = %s", query_discount)
             promotions += Promotion.find_by_discount(query_discount)
 
-
         if args['customer']:
             filtered = True
             query_customer = args['customer']
             app.logger.info("customer = %s", query_customer)
             promotions += Promotion.find_by_customer(query_customer)
-
 
         if args['start_date']:
             filtered = True
@@ -241,10 +239,10 @@ class PromotionCollection(Resource):
         app.logger.info(f"promotions: \n{promotions}")
 
         # kludgy check for no match on query
-        if len(promotions) == 1:
-            test_serialize = promotions[0].serialize()
-            if all([True for item in list(test_serialize.values()) if item is None]):
-                return "No results found for query string", status.HTTP_404_NOT_FOUND
+        # if len(promotions) == 1 and filtered:
+        #     test_serialize = promotions[0].serialize()
+        #     if all([True for item in list(test_serialize.values()) if item is None]):
+        #         return "No results found for query string", status.HTTP_404_NOT_FOUND
 
         if promotions == []:
             if filtered:
@@ -257,7 +255,7 @@ class PromotionCollection(Resource):
             promotions = list(set(promotions))
 
         results = [promo.serialize() for promo in promotions]
-        if type(results) != list:
+        if not isinstance(results, list):
             results = [results]
         app.logger.info("Returning %d promotions", len(results))
         return results, status.HTTP_200_OK
